@@ -1,0 +1,907 @@
+%! TeX program = xelatex
+\documentclass[zihao=-4, fontset=windows]{ctexart}
+\input{./note-setup-leftsidebox.tex}
+
+\title{\LaTeX{} 生成式AI学习}
+\author{张哲源}
+\date{\today}
+\setauthoremail{447648804@qq.com} % 笔记作者的邮箱
+
+% 论文相关字段
+%\setjournal{Rubbish and Garbage}
+%\setpaperauthor{Alpha, Beta, Gamma}
+%\setpaperdate{2025-11-27}
+%\setpaperdoi{10.1234/journal.2025.12345}
+
+\begin{document}
+
+\maketitle
+
+%===================================
+% 表格测试
+%===================================
+\section{表格展示}
+
+% === 表格内脚注和跨页表格测试 ===
+\subsection{表格内脚注和跨页表格}
+
+% 使用tabularray宏包的longtblr环境创建跨页长表格
+\begin{longtblr}[
+    caption = {mVRP-D 模型符号及含义},  % 表格标题
+    label = {tab:mvrpd-sign-meaning-longtable},   % 表格标签，用于后续交叉引用（\ref{}）
+    % 定义表注：标识为[a]，内容包含交叉引用锚点
+    note{a} = {\footnotesize\hypertarget{tab:mvrpd-item-1}{}文章中假设无人机的最大续航里程与无人机的自重和运载的顾客包裹的重量之和成反比。},
+]{
+    width = \textwidth,       % 表格总宽度等于文本宽度
+    colspec = {@{} Q[l, mode=math] X[l] @{} },  % 列格式设置
+    % 解释colspec：
+    % @{} 移除表格左右两侧的默认空白（使表格边缘更紧凑）
+    % Q[l, mode=math] 第一列：左对齐（l），默认进入数学模式（无需手动加$...$）
+    % X[l] 第二列：自适应宽度（填充剩余空间），左对齐（l）
+    row{1} = {font=\bfseries, mode=text},  % 表头行（第1行）样式：文字加粗（\bfseries），强制文本模式（覆盖数学模式）
+    rowhead = 1,              % 设置第1行为表头，表格跨页时每页顶部自动重复显示表头
+}
+    \toprule[1pt] % 表头线宽1pt
+    符号 & 含义 \\
+    \midrule[0.75pt] % 中间线宽0.75pt
+    G = (N, E) & 定义顾客和仓库节点的图 \\ 
+    N = \{0, 1, 2, \dots, n, n + 1\} & 图的节点，包括顾客节点 $i, j \in N_c = \{1, 2, \dots, n\}$ 以及仓库节点（其中一个是虚拟仓库） $\{0, n + 1\}$ \\ 
+    N_c = N \setminus \{0, n + 1\} & 顾客节点集合 $\{1, 2, \dots, n\}$ \\
+    N_0 = N \setminus \{n + 1\} & 无人机或卡车可能的出发节点集合 $\{0, 1, \dots, n\}$ \\ 
+    N_+ = N \setminus \{0\} & 无人机或卡车可能的到达节点集合 $\{1, 2, \dots, n, n + 1\}$ \\
+    E & 图的弧，可能的配送路径 \\
+    q_i & 顾客 $i$ 的需求（包裹重量） \\ 
+    K & 卡车组的集合，卡车组的数量为 $\mid K \mid$，卡车组的索引为 $k$ \\ 
+    f & 无人机空载时的自重 \\ 
+    m_k^K & 卡车最大载重限制 \\
+    m_k^D & 卡车 $k$ 上的无人机的最大载重限制 \\ 
+    e_k^D & 卡车组 $k$ 的无人机空载时的最大续航里程 \\ 
+    e_{ki}^D & 卡车 $k$ 上的无人机载重顾客 $i$ 的需求时的续航里程，当 $q_i \leq m_k^D$ 时，$e_{ki}^D = e_k^D \frac{f}{f + q_i}$，否则 $e_{ki}^D = 0$\hyperlink{tab:mvrpd-item-1}{\TblrNote{a}} \\ 
+    t_{ijk}^K & 卡车 $k$ 从节点 $i$ 到节点 $j$ 所需的行驶时间 \\ 
+    t_{ijk}^D & 卡车 $k$ 上的无人机从节点 $i$ 到节点 $j$ 所需的飞行时间 \\ 
+    \langle i, j , h\rangle & 无人机的运输路径，从 $i$ 节点起飞，配送顾客节点 $j$，最终和卡车在节点 $h$ 会合 \\ 
+    F & 所有可能的无人机的运输路径，即无人机搭载顾客节点 $j$ 的包裹时的最大续航里程不小于从 $i$ 节点到 $j$ 顾客节点和从 $j$ 顾客节点到卡车所在节点 $h$ 的飞行时间之和 $(i, j, h) \in F, i \in N_0, j \in \{N_c: j \neq i\}, h \in \{N_+: h \neq j, h \neq i, t_{ijk}^D + t_{jhk}^D \leq e_{kj}^D\}$ \\
+    s^K & 单辆卡车的单位时间内的单位运输成本 \\ 
+    s^D & 单架无人机单位时间内的单位运输成本 \\
+    s^W & 单辆卡车的单位时间内的单位等待时间成本 \\
+    s^G & 单个卡车组的固定使用成本 \\ 
+    M & 足够大的正数 \\ 
+    \alpha_{ijk} & 二元决策变量，当卡车 $k$ 从节点 $i \in N_0$ 行驶到节点 $j \in N_+$ 时等于 $1$，否则为 $0$ \\
+    \beta_{ijhk} & 二元决策变量，当卡车 $k$ 上的无人机从节点 $i \in N_0$ 起飞，服务顾客节点 $j \in N_c$，最终和卡车 $k$ 在节点 $h \in N_+$ 会合时等于 $1$，否则等于 $0$ \\ 
+    \mu_{ik} & 整数，表示卡车 $k$ 的路径中节点 $i$ 的次序 \\
+    \gamma_{ijk} & 二元决策变量，当卡车 $k$ 服务节点 $i$ 的次序在服务节点 $j$ 的次序之前时等于 $1$，否则等于 $0$ \\
+    \tau_{ik}^K & 非负连续变量，卡车 $k$ 到达节点 $i$ 的时间 \\ 
+    \tau_{ik}^D & 非负连续变量，卡车 $k$ 上的无人机到达节点 $i$ 的时间 \\ 
+    \rho_{ik} & 非负连续变量，卡车组 $k$ 到达节点 $i$ 的时间（即卡车或无人机最后一个到达节点 $i$ 的时间） \\
+    \varepsilon_k & 二元变量，当卡车组 $k$ 被选中时等于 $1$（即卡车组 $k$ 参与了配送） ，否则等于 $0$ \\ 
+    \bottomrule[1pt] % 表尾线宽1pt
+\end{longtblr}
+
+% === 单元格内换行测试 ===
+\subsection{单元格内换行}
+
+\begin{tabular}{|c|c|}
+    \hline
+    \thead{双行\\表头} &
+        \thead{双行\\表头}\\
+    \hline
+    \multirowcell{2}{简单\\粗暴} &
+        \makecell[l]{ABCD\\EF} \\
+    \cline{2-2} &
+        \makecell*{更大的竖直空距} \\
+    \hline
+\end{tabular}
+
+% === 跨行跨列表格测试 ===
+\subsection{跨行跨列表格}
+
+\begin{tabular}{|c|c|c|}
+    \hline
+    \multirow{2}{2cm}{A Text!}
+        & ABC & DEF \\
+    \cline{2-3} & abc & def \\
+    \hline
+    \multicolumn{2}{|c|}
+        {\multirow{2}*{Nothing}} &
+        XYZ \\
+    \multicolumn{2}{|c|}{} & xyz \\
+    \hline
+\end{tabular}
+
+% === 嵌套表格测试 ===
+\subsection{嵌套表格}
+
+\begin{tabular}{|c|l|c|}
+\hline
+a & bbb & c \\ \hline
+a & \multicolumn{1}{@{}l@{}|}
+{\begin{tabular}{c|c}
+a & b \\ \hline
+aa & bb \\
+\end{tabular}}
+& c \\ \hline
+a & b & c \\ \hline
+\end{tabular}
+
+%===================================
+% 参考文献和数学公式测试
+%===================================
+\section{参考文献、数学公式}
+
+\subsection{Traveling Salesman Problem}
+
+旅行商问题（Traveling Salesman Problem, TSP）是组合优化领域的经典问题之一，其核心目标是给定城市列表和每对城市之间的距离，求恰好访问每个城市一次并返回起始城市的最短可能路线。该问题于1930年正式提出，是优化中研究最深入的问题之一，被用作许多优化方法的基准。自从该问题被正式提出以来，一直是运筹学、计算机科学和物流管理等领域的研究热点，尽管该问题在计算上很困难，但许多启发式方法和精确算法是已知的\cite{2009A, 2012Models}。
+
+\begin{figure}[!htb]
+    \centering
+    \includegraphics[width=\linewidth]{images/TSP.pdf}\\
+    \caption{TSP示意图}
+\end{figure}
+
+TSP可以表述为整数线性规划模型\cite{papadimitriou1998combinatorial}：假设共有$N$个城市，每个城市的编号为$1,\cdots,N$，从城市$i$到城市$j$的旅行成本（距离）为$c_{ij}>0$。旅行商的目标是从任意一个城市出发访问完所有的城市，每个城市只能访问一次，最后回到最初的城市，目标是找到一条依次访问所有城市且访问城市不重复的最短路线。TSP中的决策变量为$x_{ij}=\begin{cases}1, & \text{存在从城市$i$到城市$j$的路径}\\0, & \text{其他} \end{cases}$，城市节点集合表示为$V(|V| = N)$。由于可能存在子回路，所以在构建TSP模型时需要消除会产生子回路的情况，这里采用Miller-Tucker-Zemlin (MTZ)约束进行子回路的消除\cite{1960Integer}，引入连续变量$u_i(\forall i \in V, u_i \geq 0)$，其取值可以为任何非负实数（实数集合表示为$R$）。这里用$u_i$表示编号为$i$的城市的访问次序，比如当$u_i = 5$时表示编号为1的城市是从出发点开始，第5个被访问到的点。因此，TSP的数学模型可以表示为\crefrange{eq:tsp-obj}{eq:tsp-x_bound}。
+
+\begin{align}
+    \min \quad & \sum_{i \in V}\sum_{j \in V, i \neq j} c_{ij}x_{ij} & \label{eq:tsp-obj}\\
+    \text{s.t.} \quad & \sum_{i \in V} x_{ij} = 1, & \forall j \in V, i \neq j\label{eq:tsp-in}\\
+    \quad & \sum_{j \in V} x_{ij} = 1, & \forall i \in V, i \neq j \label{eq:tsp-out}\\
+    \quad & u_i - u_j + Nx_{ij} \leq N - 1, & \forall i, j \in V; i \neq j \label{eq:tsp-subtour}\\
+    \quad & u_i \geq 0, & u_i \in R \label{eq:tsp-u_bound}\\
+    \quad & x_{ij} \in \{0, 1\}, & i, j \in V; i \neq j \label{eq:tsp-x_bound}
+\end{align}
+
+目标函数\eqref{eq:tsp-obj}表示最小化访问所有城市的成本（距离），约束\eqref{eq:tsp-in}和\eqref{eq:tsp-out}保证每个城市节点的入度和出度为1，即每个城市只进入一次和出去一次，保证了每个城市只访问一次，不会被重复访问，约束\eqref{eq:tsp-subtour}消除子回路，约束\eqref{eq:tsp-u_bound}和\eqref{eq:tsp-x_bound}表示变量的取值范围。
+
+%===================================
+% 颜色
+%===================================
+\section{颜色}
+
+% === 测试颜色名称 ===
+\subsection{颜色名称测试（dvipsnames, svgnates, x11names）}
+
+\begin{itemize}
+    \item \textcolor{Red}{Red (dvipsname)}
+    % \item \textcolor{Crimson}{Crimson (svgnames)}
+    \item \textcolor{DeepSkyBlue2}{DeepSkyBlue2 (x11names)}
+    \item \textcolor{ForestGreen}{ForestGreen (dvipsname)}
+    % \item \textcolor{MediumVioletRed}{MediumVioletRed (svgnames)}
+    \item \textcolor{DarkOrange1}{DarkOrange1 (x11names)}
+\end{itemize}
+
+% === 自定义颜色测试 ===
+\subsection{自定义颜色示例}
+
+\definecolor{MyBlue}{RGB}{0, 100, 255} % 使用 RGB 定义颜色
+\definecolor{MyYellow}{HTML}{FFD700} % 使用 HTML 十六进制定义颜色
+
+\textcolor{MyBlue}{这是自定义的蓝色文本。}
+
+\textcolor{MyYellow}{这是自定义的黄色文本。}
+
+% === 高级颜色混合测试 ===
+\subsection{颜色混合示例}
+
+\textcolor{blue!50!red}{混合 50\% 蓝色和 50\% 红色}
+
+\textcolor{green!60!white}{混合 60\% 绿色和 40\% 白色}
+
+\textcolor{orange!30!yellow!70}{混合 30\% 橙色、70\% 黄色}
+
+% === 背景色测试 ===
+\subsection{背景色示例}
+
+% \colorbox{LavenderBlush}{这是 LavenderBlush 背景色的文本。}
+
+\colorbox{SkyBlue}{这是 SkyBlue 背景色的文本。}
+
+% \colorbox{PeachPuff}{这是 PeachPuff 背景色的文本。}
+
+%===================================
+% 插入图片及子图测试
+%===================================
+\section{插入图片及子图}
+
+% === 插入图片测试 ===
+\subsection{插入图片}
+
+\begin{figure}[!htb]
+    \centering
+    \includegraphics[width=\linewidth]{banner.jpg}\\
+    \caption{图片示例}
+\end{figure}
+
+% === 子图排列测试 ===
+\subsection{子图排列}
+
+\begin{figure}[!htbp]
+    % 第一行：两个子图
+    \begin{subfigure}[b]{0.48\textwidth}
+        \includegraphics[width=\linewidth]{about.jpg}
+        \caption{子图 A}
+        \label{fig:subfig_a}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}[b]{0.48\textwidth}
+        \includegraphics[width=\linewidth]{about.jpg}
+        \caption{子图 B}
+        \label{fig:subfig_b}
+    \end{subfigure}
+
+    % 第二行：两个子图
+    \begin{subfigure}[b]{0.48\textwidth}
+        \includegraphics[width=\linewidth]{about.jpg}
+        \caption{子图 C}
+        \label{fig:subfig_c}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}[b]{0.48\textwidth}
+        \includegraphics[width=\linewidth]{about.jpg}
+        \caption{子图 D}
+        \label{fig:subfig_d}
+    \end{subfigure}
+
+    \centering
+    \caption{多张子图排列示例 1}
+    \label{fig:multi_subfigures}
+\end{figure}
+
+\begin{figure}[!htbp]
+    % 第一行：两个子图
+    \begin{subfigure}[b]{\textwidth}
+        \includegraphics[width=\linewidth]{home.jpg}
+        \caption{子图 1}
+    \end{subfigure}
+
+    % 第二行：两个子图
+    \begin{subfigure}[b]{0.48\textwidth}
+        \includegraphics[width=\linewidth]{home.jpg}
+        \caption{子图 2}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}[b]{0.48\textwidth}
+        \includegraphics[width=\linewidth]{home.jpg}
+        \caption{子图 3}
+    \end{subfigure}
+
+    \centering
+    \caption{多张子图排列示例 2}
+\end{figure}
+
+%===================================
+% 伪代码测试
+%===================================
+\section{伪代码}
+
+\begin{algorithm}[H]
+    \KwIn{This is some input}
+    \KwOut{This is some output}
+    \SetAlgoLined
+    \SetNoFillComment
+    \tcc{This is a comment}
+    \vspace{3mm}
+    some code here\;
+    $x \leftarrow 0$\;
+    $y \leftarrow 0$\;
+    \uIf{$ x > 5$} {
+        x is greater than 5 \tcp*{This is also a comment}
+    }
+    \Else {
+        x is less than or equal to 5\;
+    }
+    \ForEach{y in 0..5} {
+        $y \leftarrow y + 1$\;
+    }
+    \For{$y$ in $0..5$} {
+        $y \leftarrow y - 1$\;
+    }
+    \While{$x > 5$} {
+        $x \leftarrow x - 1$\;
+    }
+    \Return Return something here\;
+    \caption{what}
+\end{algorithm}
+
+%===================================
+% 代码环境测试
+%===================================
+\section{代码环境}
+
+% === 多行代码测试 ===
+\subsection{多行代码}
+
+Python 代码：
+
+\begin{minted}{python}
+def hello_en():
+    print("Hello, world!")
+
+def hello_cn():
+    print("你好，世界！")
+
+hello_en()
+hello_cn()
+\end{minted}
+
+C++ 代码：
+
+\begin{minted}{cpp}
+#include <iostream>
+#include <vector>
+#include <string>
+
+using namespace std;
+
+void getNext(int *next, const string &p) {
+    int m = p.size(), j = 0; // j is the length of the previous longest prefix suffix 
+    next[0] = 0; // The first character has no proper prefix or suffix
+    for (int i = 1; i < m; ++i) { // Start from the second character
+        // Check if the j > 0 because we need to index to the previous next value
+        while (j > 0 && p[i] != p[j]) { // Backtrack if there is a mismatch
+            j = next[j - 1]; // j - 1 because next is 0-indexed
+        }
+        if (p[i] == p[j]) { // If characters match, increment j, namely the length of the current prefix
+            ++j;
+        }
+        next[i] = j; // Set the next value for the current character
+    }
+}
+
+int kmp(const string &s, const string &p) {
+    int n = s.size(), m = p.size();
+    if (n < m) { // Check if the pattern is longer than the text
+        cout << "Pattern is longer than text." << endl;
+        return -1;
+    }
+    if (m == 0) { // Check if the pattern is empty
+        cout << "Empty pattern." << endl;
+        return -1;
+    }
+    vector<int> next(m);
+    getNext(&next[0], p); // Initialize the next array for the pattern p
+    for (int i = 0, j = 0; i < n; ++i) { // i is the index in the main string s and j is the index in the pattern p
+        while (j > 0 && s[i] != p[j]) { // Mismatch after j matches
+            j = next[j - 1]; // Use the next array to skip unnecessary comparisons, minus 1 because next is 0-indexed
+        }
+        if (s[i] == p[j]) { // Match found and increment j to check next character
+            ++j;
+        }
+        if (j == m) { // If j equals the length of the pattern, the first occurrence is found
+            cout << "Pattern found at index: " << i + 1 - m << endl;
+            return 0; // Return after finding the first occurrence
+        }
+    }
+    return -1; // If no match is found, return -1
+}
+
+int main() {
+    string s, p;
+    cin >> s >> p;
+    cout << "The main string is: " << s << endl;
+    cout << "The pattern string is: " << p << endl;
+    int result = kmp(s, p);
+    if (result == -1) {
+        cout << "Pattern not found." << endl;
+    } else {
+        cout << "Pattern found successfully." << endl;
+    }
+    return 0;
+}
+\end{minted}
+
+% === 行内代码测试 ===
+\subsection{行内代码}
+
+This is an example of minted in the same line \mintinline{python}{print("Hello world!")}.
+
+%===================================
+% 编辑体验测试 
+%===================================
+\section{编辑体验}
+
+\subsection{超链接}\label{sec:hyperlink}
+
+The url (outer link) color is just like \href{https://chen-huaneng.github.io/}{this}. The inner link color is just like this one $\rightarrow$ \ref{sec:hyperlink}. The citation is like this\cite{2009A}.
+
+\subsection{脚注}
+
+This is a footnote example\footnote{Related footnote is here.}.
+
+\subsection{边注}
+
+\marginpar{A marginpar.}Such a marginpar is like that. \marginpar{Hello world!} This is after the marginpar.
+
+\subsection{智能交叉引用}
+
+这是一个数学公式引用：\autoref{eq:tsp-out}，这是一个图片引用：\autoref{fig:subfig_a}，这是一个表格引用：\autoref{tab:mvrpd-sign-meaning-longtable}。
+
+\section{Section example}
+
+\subsection{Subsection example}
+
+This is a subsection example.
+
+\subsubsection{Subsubsection example}
+
+This is a subsubsection example.
+
+\section*{Unnumbered section example}
+
+\subsection*{Unnumbered subsection example}
+
+This is a unnumbered subsection example.
+
+\subsubsection*{Unnumbered subsubsection example}
+
+This is a unnumbered subsubsection example.
+
+%===================================
+% 字体测试
+%===================================
+\section{中文字体测试}
+
+% === 中文主字体测试 ===
+\subsection{中文主字体（LXGWWenKaiScreen）}
+这是默认的中文字体（\textbf{加粗}和\textit{斜体}分别为方正黑体和方正楷体）。  
+\par
+\textbf{加粗文本示例：这是一段加粗的中文文本。}
+\par
+\textit{斜体文本示例：这是一段斜体的中文文本。}
+
+% === 中文无衬线字体测试 ===
+\subsection{中文无衬线字体（FZHTJW）}
+{\sffamily
+这是无衬线字体（\textbf{加粗}效果由 AutoFake 生成，\textit{斜体}为方正仿宋）。  
+\par
+\textbf{加粗文本示例：这是一段加粗的无衬线中文文本。}
+\par
+\textit{斜体文本示例：这是一段斜体的无衬线中文文本。}
+}
+
+% === 等宽字体测试 ===
+\subsection{等宽字体（LXGWWenKaiMonoScreen）}
+{\ttfamily
+这是等宽字体（\textbf{加粗}效果由 AutoFake 生成，\textit{斜体}为方正书宋）。  
+\par
+\textbf{加粗文本示例：这是一段加粗的等宽中文文本。}
+\par
+\textit{斜体文本示例：这是一段斜体的等宽中文文本。}
+}
+
+% === 混合字体测试 ===
+\subsection{混合字体测试}
+{
+\textbf{主字体（LXGWWenKaiScreen）}
+\par
+\sffamily{无衬线字体（FZHTJW）}
+\par
+\ttfamily{等宽字体（LXGWWenKaiMonoScreen）}
+\par
+\textbf{主字体}和\sffamily{无衬线}的切换效果。  
+\par
+\texttt{等宽字体}与\textbf{普通字体}的对比。 
+}
+
+\section{English Font Test}
+
+% === 英文主字体测试 ===
+\subsection{English Main Font (Times New Roman)}
+This is the default English font (serif).  
+\par
+\textbf{Bold} and \textit{Italic} effects are generated automatically.  
+
+% === 英文无衬线字体测试 ===
+\subsection{English Sans-serif Font (Arial)}
+{\sffamily
+This is the English sans-serif font.  
+\par
+\textbf{Bold} and \textit{Italic} effects are generated automatically.  
+}
+
+% === 英文等宽字体测试 ===
+\subsection{English Monospace Font (Consolas)}
+{\ttfamily
+This is the English monospace font.  
+\par
+\textbf{Bold} and \textit{Italic} effects are generated automatically.  
+}
+
+% === 混合字体测试 ===
+\subsection{中英文混合字体测试}
+\textbf{Main Font:} Times New Roman + \textbf{中文主字体:} LXGWWenKaiScreen.  
+\par
+{\sffamily \textbf{Sans-serif Font:} Arial + \textbf{中文无衬线字体:} FZHTJW.}  
+\par
+{\ttfamily \textbf{Monospace Font:} Consolas + \textbf{中文等宽字体:} LXGWWenKaiMonoScreen.}
+
+% === 中文字体测试 ===
+\section{滕王阁序}
+　　 豫章故郡，洪都新府。星分翼轸(zhěn)，地接衡庐。襟三江而带五湖，控蛮荆而引瓯（ōu）越。物华天宝，龙光射牛斗之墟；人杰地灵，徐孺下陈蕃(fān)之榻。雄州雾列，俊采星驰，台隍(huáng)枕夷夏之交，宾主尽东南之美。都督阎公之雅望，棨(qǐ )戟遥临；宇文新州之懿(yì)范，襜(chān )帷(wéi)暂驻。十旬休假，胜友如云；千里逢迎，高朋满座。腾蛟起凤，孟学士之词宗；紫电清霜，王将军之武库。家君作宰，路出名区；童子何知，躬逢胜饯。
+
+　　时维九月，序属三秋。潦（lǎo）水尽而寒潭清，烟光凝而暮山紫。俨(yǎn)骖騑(cān fēi)于上路，访风景于崇阿(ē)。临帝子之长洲，得天人之旧馆。层峦耸翠，上出重霄；飞阁流（一作 翔）丹，下临无地。鹤汀（tīng）凫(fú )渚（zhǔ），穷岛屿之萦(yíng)回；桂殿兰宫，即（一作 列）冈峦之体势。
+
+　　披绣闼（tà），俯雕甍(méng )。山原旷其盈视，川泽纡(yū)其骇瞩。闾(lǘ)阎(yán) 扑地，钟鸣鼎食之家；舸（gě)舰弥津，青雀黄龙之舳（zhú）。云销雨霁(jì)，彩彻区明（或作 虹销雨霁，彩彻云衢 qú）。落霞与孤鹜(wù)齐飞，秋水共长天一色。渔舟唱晚，响穷彭蠡（l ǐ）之滨；雁阵惊寒，声断衡阳之浦。
+
+　　遥襟甫畅，逸兴遄(chuán)飞。爽籁发而清风生，纤歌凝而白云遏(è)。睢(suī)园绿竹，气凌彭泽之樽；邺(yè)水朱华，光照临川之笔。四美具，二难并。穷睇眄(dì miǎn)于中天，极娱游于暇日。天高地迥(jiǒng)，觉宇宙之无穷；兴尽悲来，识盈虚之有数。望长安于日下，目吴会（kuài）于云间。地势极而南溟(míng)深，天柱高而北辰远。关山难越，谁悲失路之人；萍水相逢，尽是他乡之客。怀帝阍(hūn)而不见，奉宣室以何年。
+
+　　嗟(jiē)乎！时运不齐，命途多舛(chuǎn)；冯唐易老，李广难封。屈贾谊（yì）于长沙，非无圣主；窜梁鸿于海曲，岂乏明时？所赖君子见机，达人知命。老当益壮，宁移白首之心？穷且益坚，不坠青云之志。酌贪泉而觉爽，处涸辙（hé zhé）以犹欢。北海虽赊（shē），扶摇可接；东隅(yú)已逝，桑榆非晚。孟尝高洁，空余报国之情；阮籍猖狂，岂效穷途之哭！
+
+　　勃，三尺微命，一介书生。无路请缨，等终军之弱冠（guàn）；有怀投笔，慕宗悫（què）之长风。舍簪（zān）笏（hù）于百龄，奉晨昏于万里。非谢家之宝树，接孟氏之芳邻。他日趋庭，叨(tāo)陪鲤对；今兹捧袂(mèi)，喜托龙门。杨意不逢，抚凌云而自惜；钟期既遇，奏流水以何惭？
+
+　　呜呼！胜地不常，盛筵(yán)难再；兰亭已矣，梓(zǐ) 泽丘墟。临别赠言，幸承恩于伟饯；登高作赋，是所望于群公。敢竭鄙怀，恭疏短引；一言均赋，四韵俱成。请洒潘江，各倾陆海云尔。　
+
+　　滕王高阁临江渚，佩玉鸣鸾罢歌舞。
+
+　　画栋朝飞南浦云，珠帘暮卷西山雨。
+
+　　闲云潭影日悠悠，物换星移几度秋。
+
+　　阁中帝子今何在？槛外长江空自流。
+
+% === 英文字体测试 ===
+\section{Do Not Go Gentle into That Good Night}
+
+Do not go gentle into that good night,
+
+Old age should burn and rave at close of day;
+
+Rage, rage against the dying of the light.
+
+Though wise men at their end know dark is right,
+
+Because their words had forked no lightning they
+
+Do not go gentle into that good night.
+
+Good men, the last wave by, crying how bright
+
+Their frail deeds might have danced in a green bay,
+
+Rage, rage against the dying of the light.
+
+Wild men who caught and sang the sun in flight,
+
+And learn, too late, they grieved it on its way,
+
+Do not go gentle into that good night.
+
+Grave men, near death, who see with blinding sight
+
+Blind eyes could blaze like meteors and be gay,   
+
+Rage, rage against the dying of the light.
+
+And you, my father, there on the sad height,
+
+Curse, bless, me now with your fierce tears, I pray.
+
+Do not go gentle into that good night.
+
+Rage, rage against the dying of the light.
+
+%===================================
+% 定理盒子测试
+%===================================
+\section{Theorem, Proposition, Proof}
+
+\begin{theorem}
+    If $1<p<\infty$ and $m > n/p$, or $p=1$ and $m \ge n$, there exist a constant $C = C(m,n,\gamma,p)$, such that
+    \begin{equation*}
+        \Vert R^m u \Vert_{L^\infty(\Omega)} \le C d^{m-n/p} |u|_{W^m_p(\Omega)}
+    \end{equation*}
+    for all $u \in W^m_p(\Omega)$.
+\end{theorem}
+\begin{proof}
+    First, we assume that $u \in C^m(\Omega) \cap W^m_p(\Omega)$. We can use the pointwise representation of $R^mu(x)$.
+    \begin{align*}
+        |R^mu(x)| ={} & m \left| \sum_{|\alpha| = m} \int_{C_x} k_{\alpha}(x,z) D^\alpha u(z)\,dz \right| \notag \\
+        \le{}         & C \sum_{|\alpha|=m} \int_{\Omega} |x-z|^{-n+m} |D^\alpha u(z)|\,dz \notag                \\
+        \le{}         & C' d^{m-n/p} |u|_{W^m_p(\Omega)}.
+    \end{align*}
+    The proof can be completed via a density argument.
+\end{proof}
+
+\begin{theorem}[xxx]
+    If $1<p<\infty$ and $m > n/p$, or $p=1$ and $m \ge n$, there exist a constant $C = C(m,n,\gamma,p)$, such that
+    \begin{equation*}
+        \Vert R^m u \Vert_{L^\infty(\Omega)} \le C d^{m-n/p} |u|_{W^m_p(\Omega)}
+    \end{equation*}
+    for all $u \in W^m_p(\Omega)$.
+\end{theorem}
+\begin{proof}[\upshape\bfseries Proof of xxx]
+    First, we assume that $u \in C^m(\Omega) \cap W^m_p(\Omega)$. We can use the pointwise representation of $R^mu(x)$.
+    \begin{align*}
+        |R^mu(x)| ={} & m \left| \sum_{|\alpha| = m} \int_{C_x} k_{\alpha}(x,z) D^\alpha u(z)\,dz \right| \notag \\
+        \le{}         & C \sum_{|\alpha|=m} \int_{\Omega} |x-z|^{-n+m} |D^\alpha u(z)|\,dz \notag                \\
+        \le{}         & C' d^{m-n/p} |u|_{W^m_p(\Omega)}.
+    \end{align*}
+    The proof can be completed via a density argument.
+\end{proof}
+
+\begin{theorem*}
+    If $1<p<\infty$ and $m > n/p$, or $p=1$ and $m \ge n$, there exist a constant $C = C(m,n,\gamma,p)$, such that
+    \begin{equation*}
+        \Vert R^m u \Vert_{L^\infty(\Omega)} \le C d^{m-n/p} |u|_{W^m_p(\Omega)}
+    \end{equation*}
+    for all $u \in W^m_p(\Omega)$.
+\end{theorem*}
+\begin{proof}
+    First, we assume that $u \in C^m(\Omega) \cap W^m_p(\Omega)$. We can use the pointwise representation of $R^mu(x)$.
+    \begin{align*}
+        |R^mu(x)| ={} & m \left| \sum_{|\alpha| = m} \int_{C_x} k_{\alpha}(x,z) D^\alpha u(z)\,dz \right| \notag \\
+        \le{}         & C \sum_{|\alpha|=m} \int_{\Omega} |x-z|^{-n+m} |D^\alpha u(z)|\,dz \notag                \\
+        \le{}         & C' d^{m-n/p} |u|_{W^m_p(\Omega)}.
+    \end{align*}
+    The proof can be completed via a density argument.
+\end{proof}
+
+\begin{proposition}
+    \begin{equation*}
+        Q^m u(x) = \sum_{|\lambda| < m} \left( \int_B \psi_\lambda(y) u(y)\,dy \right) x^\lambda
+    \end{equation*}
+    where $\psi_\lambda \in C_0^\infty(\mathbb{R}^n)$ and $\mathrm{supp}(\phi_\lambda) \in \overline{B}$.
+\end{proposition}
+\begin{proof}
+    This follows from xxx if we define
+    \begin{equation*}
+        \psi_\lambda(y) = \sum_{\alpha \ge \lambda,|\alpha|<m}
+        \frac{(-1)^{|\alpha|}}{\alpha !} a_{[\lambda,\alpha-\lambda]} D^\alpha(y^{\alpha-\lambda} \phi(y)).
+    \end{equation*}
+\end{proof}
+
+\begin{proposition}[xxx]
+    \begin{equation*}
+        Q^m u(x) = \sum_{|\lambda| < m} \left( \int_B \psi_\lambda(y) u(y)\,dy \right) x^\lambda
+    \end{equation*}
+    where $\psi_\lambda \in C_0^\infty(\mathbb{R}^n)$ and $\mathrm{supp}(\phi_\lambda) \in \overline{B}$.
+\end{proposition}
+\begin{proof}[\upshape\bfseries Proof of xxx]
+    This follows from xxx if we define
+    \begin{equation*}
+        \psi_\lambda(y) = \sum_{\alpha \ge \lambda,|\alpha|<m}
+        \frac{(-1)^{|\alpha|}}{\alpha !} a_{[\lambda,\alpha-\lambda]} D^\alpha(y^{\alpha-\lambda} \phi(y)).
+    \end{equation*}
+\end{proof}
+
+\begin{proposition*}
+    \begin{equation*}
+        Q^m u(x) = \sum_{|\lambda| < m} \left( \int_B \psi_\lambda(y) u(y)\,dy \right) x^\lambda
+    \end{equation*}
+    where $\psi_\lambda \in C_0^\infty(\mathbb{R}^n)$ and $\mathrm{supp}(\phi_\lambda) \in \overline{B}$.
+\end{proposition*}
+\begin{proof}
+    This follows from xxx if we define
+    \begin{equation*}
+        \psi_\lambda(y) = \sum_{\alpha \ge \lambda,|\alpha|<m}
+        \frac{(-1)^{|\alpha|}}{\alpha !} a_{[\lambda,\alpha-\lambda]} D^\alpha(y^{\alpha-\lambda} \phi(y)).
+    \end{equation*}
+\end{proof}
+
+\section{Corollary, Lemma, Claim}
+
+\begin{corollary}
+    Under the assumption of xxx, the following inequality holds
+    \begin{equation*}
+        \inf_{v \in P^{m-1}} \Vert u - v \Vert_{W^k_p(\Omega)} \le C_{m,n,\gamma} d^{m-k} |u|_{W^k_p(\Omega)}, \,\, k = 0,1,\dots,m,
+    \end{equation*}
+\end{corollary}
+
+\begin{corollary}[xxx]
+    Under the assumption of xxx, the following inequality holds
+    \begin{equation*}
+        \inf_{v \in P^{m-1}} \Vert u - v \Vert_{W^k_p(\Omega)} \le C_{m,n,\gamma} d^{m-k} |u|_{W^k_p(\Omega)}, \,\, k = 0,1,\dots,m,
+    \end{equation*}
+\end{corollary}
+
+\begin{corollary*}
+    Under the assumption of xxx, the following inequality holds
+    \begin{equation*}
+        \inf_{v \in P^{m-1}} \Vert u - v \Vert_{W^k_p(\Omega)} \le C_{m,n,\gamma} d^{m-k} |u|_{W^k_p(\Omega)}, \,\, k = 0,1,\dots,m,
+    \end{equation*}
+\end{corollary*}
+
+\begin{lemma}
+    Let $f \in L^p(\Omega)$ for $p \ge 1$ and $m \ge 1$ and let
+    \[
+        g(x) = \int_\Omega |x-z|^{-n+m} |f(z)|\,dz
+    \]
+    Then
+    \begin{equation*}
+        \Vert g \Vert_{L^p(\Omega)} \le C_{m,n} d^m \Vert f\Vert_{L^p(\Omega)}.
+    \end{equation*}
+\end{lemma}
+
+\begin{lemma}[xxx]
+    Let $f \in L^p(\Omega)$ for $p \ge 1$ and $m \ge 1$ and let
+    \[
+        g(x) = \int_\Omega |x-z|^{-n+m} |f(z)|\,dz
+    \]
+    Then
+    \begin{equation*}
+        \Vert g \Vert_{L^p(\Omega)} \le C_{m,n} d^m \Vert f\Vert_{L^p(\Omega)}.
+    \end{equation*}
+\end{lemma}
+
+\begin{lemma*}
+    Let $f \in L^p(\Omega)$ for $p \ge 1$ and $m \ge 1$ and let
+    \[
+        g(x) = \int_\Omega |x-z|^{-n+m} |f(z)|\,dz
+    \]
+    Then
+    \begin{equation*}
+        \Vert g \Vert_{L^p(\Omega)} \le C_{m,n} d^m \Vert f\Vert_{L^p(\Omega)}.
+    \end{equation*}
+\end{lemma*}
+
+\begin{claim}
+    $Q^m u$ is a polynomial of degree less than $m$ in $x$.
+\end{claim}
+
+\begin{claim}[xxx]
+    $Q^m u$ is a polynomial of degree less than $m$ in $x$.
+\end{claim}
+
+\begin{claim*}
+    $Q^m u$ is a polynomial of degree less than $m$ in $x$.
+\end{claim*}
+
+\section{Definition}
+
+\begin{definition}
+    $\Omega$ is star-shaped with respect to the ball $B$ if , for all $x \in \Omega$, the closed convex hull of $\{x\} \cup B$ is a subset of $\Omega$.
+\end{definition}
+
+\begin{definition}[xxx]
+    $\Omega$ is star-shaped with respect to the ball $B$ if , for all $x \in \Omega$, the closed convex hull of $\{x\} \cup B$ is a subset of $\Omega$.
+\end{definition}
+
+\begin{definition*}
+    $\Omega$ is star-shaped with respect to the ball $B$ if , for all $x \in \Omega$, the closed convex hull of $\{x\} \cup B$ is a subset of $\Omega$.
+\end{definition*}
+
+\section{Example}
+
+\begin{example}
+    The integral form of the Taylor remainder for $f \in C^m([0,1])$ is given by
+    \begin{equation*}
+        f(s) = \sum_{k=0}^{m-1}\frac{1}{k!} f^{(k)}(0) + \int_0^s \frac{1}{(m-1)!} f^{(m)}(t)(s-t)^{m-1}\,dt.
+    \end{equation*}
+\end{example}
+
+\begin{example}[xxx]
+    The integral form of the Taylor remainder for $f \in C^m([0,1])$ is given by
+    \begin{equation*}
+        f(s) = \sum_{k=0}^{m-1}\frac{1}{k!} f^{(k)}(0) + \int_0^s \frac{1}{(m-1)!} f^{(m)}(t)(s-t)^{m-1}\,dt.
+    \end{equation*}
+\end{example}
+
+\begin{example*}
+    The integral form of the Taylor remainder for $f \in C^m([0,1])$ is given by
+    \begin{equation*}
+        f(s) = \sum_{k=0}^{m-1}\frac{1}{k!} f^{(k)}(0) + \int_0^s \frac{1}{(m-1)!} f^{(m)}(t)(s-t)^{m-1}\,dt.
+    \end{equation*}
+\end{example*}
+
+\section{Problem, Solution}
+
+\begin{problem}
+Calculate the integral of the function $g(x) = 3x^2$ with respect to $x$.
+\end{problem}
+
+\begin{solution}
+    To calculate the integral of $g(x) = 3x^2$, we use the power rule for integration:
+    \[
+        \int 3x^2 \, dx = x^3 + C
+    \]
+    where $C$ is the constant of integration.
+\end{solution}
+
+\begin{problem}[xxx]
+Calculate the integral of the function $g(x) = 3x^2$ with respect to $x$.
+\end{problem}
+\begin{solution}[xxx]
+    To calculate the integral of $g(x) = 3x^2$, we use the power rule for integration:
+    \[
+        \int 3x^2 \, dx = x^3 + C
+    \]
+    where $C$ is the constant of integration.
+\end{solution}
+
+\begin{problem*}
+    Calculate the integral of the function $g(x) = 3x^2$ with respect to $x$.
+\end{problem*}
+\begin{solution*}
+    To calculate the integral of $g(x) = 3x^2$, we use the power rule for integration:
+    \[
+        \int 3x^2 \, dx = x^3 + C
+    \]
+    where $C$ is the constant of integration.
+\end{solution*}
+
+\section{Remark}
+
+\begin{remark}
+    Such a polynomial is not unique, due to the choice od cut-off function $\phi$.
+\end{remark}
+
+\begin{remark}[xxx]
+    Such a polynomial is not unique, due to the choice od cut-off function $\phi$.
+\end{remark}
+
+\begin{remark*}
+    Such a polynomial is not unique, due to the choice od cut-off function $\phi$.
+\end{remark*}
+
+\section{Note}
+
+\begin{note}
+    The degree of $Q^m u$ is at most $m-1$.
+\end{note}
+
+\begin{note}[xxx]
+    The degree of $Q^m u$ is at most $m-1$.
+\end{note}
+
+\begin{note*}
+    The degree of $Q^m u$ is at most $m-1$.
+\end{note*}
+
+%===================================
+% 数学公式标记测试
+%===================================
+\section{Annotate equations in \LaTeX\ using TikZ}
+
+用 \href{https://github.com/st--/annotate-equations}{annotate equations} 宏包实现数学公式的标注功能，该宏包来源于一个用 TikZ 实现数学公式标注的\href{https://github.com/synercys/annotated_latex_equations}{例子}。
+
+\annotatevspace{3em} % 为最上方的注释预留空间（yshift=3em + 安全余量）
+
+\begin{equation*}
+    \mathcal{O}\big(
+        (
+        \eqnmarkbox[NavyBlue]{p1}{p}
+        \eqnmarkbox[OliveGreen]{k1}{\kappa}^3
+        )
+        \eqnmarkbox[WildStrawberry]{T1}{T}
+        +
+        (
+        \eqnmarkbox[NavyBlue]{p2}{p}
+        \eqnmark[OliveGreen]{k2}{\kappa}
+        )
+        (
+        \eqnmarkbox[WildStrawberry]{T2}{T}^2
+        \tikzmarknode[outer ysep=1.5pt]{Is}{|\mathcal{I}^*|} % 增加箭头间距
+        \eqnmarkbox[Plum]{Nb}{N_b}
+        \eqnmark[RoyalPurple]{M}{M}
+        )
+    \big)
+\end{equation*}
+
+% 顶部注释（最大yshift）
+\annotatetwo[yshift=3.2em, font=\footnotesize]{above}{p1}{p2}{\# of nodes}
+\annotate[yshift=4.5em, font=\footnotesize]{above,left}{Is}{size of set of allowed interventions}
+
+% 中部注释
+\annotate[yshift=1.8em, font=\footnotesize]{above}{Nb}{\# of samples per batch}
+\annotatetwo[yshift=-0.5em, font=\footnotesize]{below}{T1}{T2}{\# of graphs in $\hat{\mathcal{G}}_T$}
+
+% 底部注释（最小yshift）
+\annotatetwo[yshift=-2.2em, font=\footnotesize]{below}{k1}{k2}{max.\ indegree in $\hat{\mathcal{G}}_T$}
+\annotate[yshift=-3.5em, font=\footnotesize]{below}{M}{\# of samples for $\mathbb{E}_y$}
+
+% \annotatevspace{3.5em} % 为最下方的注释预留空间（yshift=3.5em + 安全余量）
+
+% 后续正文内容
+Here is the normal text content that follows the annotated equation. 
+Notice how the annotations no longer overlap with this paragraph due to 
+the proper vertical spacing adjustments.
+
+%===================================
+% 参考文献测试
+%===================================
+\bibliography{references}
+
+%===================================
+% 插入PDF测试
+%===================================
+\includepdf[pages=-]{Travelling Salesman Problem and Bellman-Held-Karp Algorithm.pdf}
+
+\end{document}
