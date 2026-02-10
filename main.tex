@@ -42,6 +42,12 @@ $p_\theta(\mathbf{x}|\mathbf{z})$ & 生成网络（似然），概率解码器 \
 	\item \textbf{解码器 (Decoder)} $f_\theta(\cdot)$：将隐变量 $\mathbf{z}$ 映射回重构数据 $\mathbf{x}' = f_\theta(\mathbf{z})$。
 \end{itemize}
 
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.8\textwidth]{images/autoencoder-architecture.png}
+    \caption{自动编码器模型架构示意图}
+\end{figure}
+
 训练目标是最小化重构误差，例如均方误差 (MSE)：
 \begin{equation}
 	L_{\text{AE}}(\theta, \phi) = \frac{1}{n}\sum_{i=1}^n (\mathbf{x}^{(i)} - f_\theta(g_\phi(\mathbf{x}^{(i)})))^2
@@ -57,12 +63,25 @@ $p_\theta(\mathbf{x}|\mathbf{z})$ & 生成网络（似然），概率解码器 \
 	L_{\text{DAE}}(\theta, \phi) = \frac{1}{n} \sum_{i=1}^n (\mathbf{x}^{(i)} - f_\theta(g_\phi(\tilde{\mathbf{x}}^{(i)})))^2
 \end{equation}
 
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.8\textwidth]{images/denoising-autoencoder-architecture.png}
+    \caption{去噪自动编码器模型架构示意图}
+\end{figure}
+
 \subsubsection{稀疏自动编码器 (Sparse Autoencoder, SAE)}
 稀疏自动编码器通过在损失函数中增加稀疏约束，强制隐层神经元在大部分时间处于“未激活”状态。
 假设隐藏层神经元 $j$ 的平均激活度为 $\hat{\rho}_j$，我们希望它接近一个很小的稀疏参数 $\rho$（如 0.05）。通常使用 KL 散度作为惩罚项：
 \begin{equation}
 	L_{\text{SAE}}(\theta) = L(\theta) + \beta \sum_{j=1}^{s_l} D_{\text{KL}}(\rho \| \hat{\rho}_j)
 \end{equation}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.6\textwidth]{images/kl-metric-sparse-autoencoder.png}
+    \caption{伯努利分布均值为 $\rho=0.25$ 和均值为 $0 \leq \hat{\rho} \leq 1$ 的伯努利分布之间的 KL 散度}
+\end{figure}
+
 此外，还有 \textbf{$k$-稀疏自动编码器}（$k$-Sparse Autoencoder）。其前向传播步骤如下：
 \begin{enumerate}
     \item 运行编码器得到潜在代码 $\mathbf{z} = g(\mathbf{x})$。
@@ -70,6 +89,12 @@ $p_\theta(\mathbf{x}|\mathbf{z})$ & 生成网络（似然），概率解码器 \
     \item 计算重构损失 $L = \|\mathbf{x} - f(\mathbf{z}')\|_2^2$。
 \end{enumerate}
 注意：反向传播时，梯度仅通过这前 $k$ 个激活的神经元传递。
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.8\textwidth]{images/k-sparse-autoencoder.png}
+    \caption{对不同稀疏级别 k 的 MNIST 数据集学习的 k-稀疏自动编码器的滤波器}
+\end{figure}
 
 \subsubsection{收缩自动编码器 (Contracting Autoencoder, CAE)}
 收缩自动编码器旨在使学习到的表示对输入的微小扰动具有鲁棒性。它在损失函数中加入雅可比矩阵（Jacobian Matrix）的 Frobenius 范数作为惩罚项，抑制编码器激活值对输入的敏感度：
@@ -127,7 +152,11 @@ $p_\theta(\mathbf{x}|\mathbf{z})$ & 生成网络（似然），概率解码器 \
 	      \end{itemize}
 \end{itemize}
 
-
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.6\textwidth]{images/VAE-graphical-model.png}
+    \caption{变分自动编码器中涉及的概率图模型}
+\end{figure}
 
 \subsubsection{核心推导：证据下界 (Derivation of the Evidence Lower Bound, ELBO)}
 由于直接最大化 $p(X)$ 不可行，我们转而最大化它的一个下界，即\textbf{证据下界（ELBO）}。我们从对数边际似然 $\log p(X)$ 开始，引入近似后验 $q_\phi(z|X)$，并根据詹森不等式（Jensen's Inequality），得到：
@@ -156,6 +185,12 @@ $p_\theta(\mathbf{x}|\mathbf{z})$ & 生成网络（似然），概率解码器 \
 	\end{itemize}
 \end{note}
 
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.8\textwidth]{images/forward_vs_reversed_KL.png}
+    \caption{前向和反向 KL 散度对匹配两个分布有不同的要求}
+\end{figure}
+
 \begin{note}[目标函数解读]
 	VAE的训练目标是最大化ELBO，它由两部分构成：
 	\begin{itemize}
@@ -175,6 +210,17 @@ $p_\theta(\mathbf{x}|\mathbf{z})$ & 生成网络（似然），概率解码器 \
 	\end{enumerate}
 	这样，随机采样被移出计算图，梯度可以顺利地从损失函数回传到编码器的参数 $\phi$（即 $\mu_X$ 和 $\sigma_X$）。
 \end{definition}
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=0.6\textwidth]{images/reparameterization-trick.png}
+	\caption{重参数化技巧示意图}
+\end{figure}
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=0.8\textwidth]{images/vae-gaussian.png}
+	\caption{假设多元高斯分布的变分自动编码器模型示意图}
+\end{figure}
 
 
 
@@ -235,7 +281,19 @@ $\beta$-VAE 旨在通过调整 ELBO 中的 KL 散度项权重来发现解耦的�
 	N_i^{(t)} = \gamma N_i^{(t-1)} + (1-\gamma)n_i^{(t)}, \quad \mathbf{m}_i^{(t)} = \gamma \mathbf{m}_i^{(t-1)} + (1-\gamma)\sum_{j} \mathbf{z}_{i,j}^{(t)}, \quad \mathbf{e}_i^{(t)} = \frac{\mathbf{m}_i^{(t)}}{N_i^{(t)}}
 \end{equation}
 
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=0.8\textwidth]{images/VQ-VAE.png}
+	\caption{VQ-VAE 的架构}
+\end{figure}
+
 \textbf{VQ-VAE-2} 进一步引入了层级结构（Hierarchical VQ-VAE），分离局部纹理和全局形状信息，并结合自回归模型（如 PixelCNN）来学习离散编码的先验分布，生成了极高质量的图像。
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=0.8\textwidth]{images/VQ-VAE-2.png}
+	\caption{层次 VQ-VAE 和多阶段图像生成的架构}
+\end{figure}
 
 \subsubsection{TD-VAE (Temporal Difference VAE)}
 TD-VAE 专为序列数据设计，旨在解决传统序列模型推断效率低的问题。它基于三个核心思想：
@@ -244,6 +302,12 @@ TD-VAE 专为序列数据设计，旨在解决传统序列模型推断效率低�
 	\item \textbf{信念状态 (Belief State):} 智能体应学会将过去的所有信息编码为一个信念状态 $b_t$，用于推理未来。
 	\item \textbf{跳跃预测 (Jumpy Prediction):} 模型应具备根据当前信息直接预测遥远未来的能力，而无需一步步模拟中间过程。
 \end{enumerate}
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=0.6\textwidth]{images/TD-VAE-state-space.png}
+	\caption{作为马尔可夫链模型的状态空间模型}
+\end{figure}
 
 TD-VAE 需要学习四种分布：
 \begin{itemize}
@@ -257,6 +321,11 @@ TD-VAE 的最终目标函数是在两个时间戳 $t_1 < t_2$ 之间最大化以
 	J_{t_1, t_2} = \mathbb{E} [ \log p_D(x_{t_2}|z_{t_2}) + \log p_B(z_{t_1}|b_{t_1}) + \log p_T(z_{t_2}|z_{t_1}) - \log p_B(z_{t_2}|b_{t_2}) - \log p_S(z_{t_1}|z_{t_2}, b_{t_1}, b_{t_2}) ]
 \end{equation}
 
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=1.0\textwidth]{images/TD-VAE.png}
+	\caption{TD-VAE 架构详细概览}
+\end{figure}
 
 \nocite{*}
 \bibliography{references}
