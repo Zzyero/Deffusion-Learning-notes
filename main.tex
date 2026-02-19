@@ -12,22 +12,23 @@
 
 \section{变分自编码器 (Variational Autoencoder, VAE)}
 
-\subsection*{符号说明 (Notation)}
-\begin{center}
-\begin{tabular}{ll}
-\toprule
-\textbf{符号} & \textbf{含义} \\
-\midrule
-$\mathcal{D}$ & 数据集，$\mathcal{D} = \{ \mathbf{x}^{(1)}, \dots, \mathbf{x}^{(n)} \}$ \\
-$\mathbf{x}^{(i)}$ & 第 $i$ 个数据样本，维度为 $d$ \\
-$\mathbf{z}$ & 瓶颈层学习到的压缩隐变量 (Latent Code) \\
-$g_\phi(\cdot)$ & 编码器函数，参数为 $\phi$ \\
-$f_\theta(\cdot)$ & 解码器函数，参数为 $\theta$ \\
-$q_\phi(\mathbf{z}|\mathbf{x})$ & 推断网络（近似后验），概率编码器 \\
-$p_\theta(\mathbf{x}|\mathbf{z})$ & 生成网络（似然），概率解码器 \\
-\bottomrule
-\end{tabular}
-\end{center}
+\begin{table}[H]
+	\centering
+	\caption{符号说明}
+	\begin{tabular}{ll}
+		\toprule
+		\textbf{符号} & \textbf{含义} \\
+		\midrule
+		$\mathcal{D}$ & 数据集，$\mathcal{D} = \{ \mathbf{x}^{(1)}, \dots, \mathbf{x}^{(n)} \}$ \\
+		$\mathbf{x}^{(i)}$ & 第 $i$ 个数据样本，维度为 $d$ \\
+		$\mathbf{z}$ & 瓶颈层学习到的压缩隐变量 (Latent Code) \\
+		$g_\phi(\cdot)$ & 编码器函数，参数为 $\phi$ \\
+		$f_\theta(\cdot)$ & 解码器函数，参数为 $\theta$ \\
+		$q_\phi(\mathbf{z}|\mathbf{x})$ & 推断网络（近似后验），概率编码器 \\
+		$p_\theta(\mathbf{x}|\mathbf{z})$ & 生成网络（似然），概率解码器 \\
+		\bottomrule
+	\end{tabular}
+\end{table}
 
 \subsection{前置知识：自编码器及其变体 (Autoencoders)}
 
@@ -329,26 +330,27 @@ TD-VAE 的最终目标函数是在两个时间戳 $t_1 < t_2$ 之间最大化以
 
 \section{扩散模型 (Diffusion Models)}
 
-\subsection*{符号说明 (Notation)}
-\begin{center}
-\begin{tabular}{ll}
-\toprule
-\textbf{符号} & \textbf{含义} \\
-\midrule
-$\mathbf{x}_0$ & 真实数据样本 \\
-$\mathbf{x}_t$ & 时间步 $t$ 的噪声样本 \\
-$T$ & 总扩散步数 \\
-$\beta_t$ & 方差调度表，控制加噪量 \\
-$\alpha_t$ & $1 - \beta_t$ \\
-$\bar{\alpha}_t$ & $\prod_{i=1}^t \alpha_i$, 累积乘积 \\
-$\boldsymbol{\epsilon}$ & 标准高斯噪声, $\mathcal{N}(\mathbf{0}, \mathbf{I})$ \\
-$\boldsymbol{\epsilon}_\theta$ & 噪声预测网络（或分数网络） \\
-$q(\mathbf{x}_t|\mathbf{x}_{t-1})$ & 前向扩散过程（加噪） \\
-$p_\theta(\mathbf{x}_{t-1}|\mathbf{x}_t)$ & 逆向扩散过程（去噪） \\
-$L_{\text{simple}}$ & 简化的均方误差损失 \\
-\bottomrule
-\end{tabular}
-\end{center}
+\begin{table}[H]
+	\centering
+	\caption{符号说明}
+	\begin{tabular}{ll}
+		\toprule
+		\textbf{符号} & \textbf{含义} \\
+		\midrule
+		$\mathbf{x}_0$ & 真实数据样本 \\
+		$\mathbf{x}_t$ & 时间步 $t$ 的噪声样本 \\
+		$T$ & 总扩散步数 \\
+		$\beta_t$ & 方差调度表，控制加噪量 \\
+		$\alpha_t$ & $1 - \beta_t$ \\
+		$\bar{\alpha}_t$ & $\prod_{i=1}^t \alpha_i$, 累积乘积 \\
+		$\boldsymbol{\epsilon}$ & 标准高斯噪声, $\mathcal{N}(\mathbf{0}, \mathbf{I})$ \\
+		$\boldsymbol{\epsilon}_\theta$ & 噪声预测网络（或分数网络） \\
+		$q(\mathbf{x}_t|\mathbf{x}_{t-1})$ & 前向扩散过程（加噪） \\
+		$p_\theta(\mathbf{x}_{t-1}|\mathbf{x}_t)$ & 逆向扩散过程（去噪） \\
+		$L_{\text{simple}}$ & 简化的均方误差损失 \\
+		\bottomrule
+	\end{tabular}
+\end{table}
 
 迄今为止，必须要提到的生成模型有三类：GAN、VAE 和基于流的模型（Flow-based models）。它们在生成高质量样本方面取得了巨大成功，但各有限制。GAN 因其对抗性训练性质，训练可能不稳定且生成多样性较差；VAE 依赖于代理损失；流模型则必须使用专门的架构来构建可逆变换。
 
@@ -356,7 +358,7 @@ $L_{\text{simple}}$ & 简化的均方误差损失 \\
 
 \begin{figure}[H]
     \centering
-    \includegraphics[width=1.0\textwidth]{images/Overview of different types of generative models.jpeg}
+    \includegraphics[width=1.0\textwidth]{images/generative_models_overview.jpeg}
     \caption{不同类型生成模型的概览：GAN、VAE、Flow-based 和 Diffusion}
 \end{figure}
 
@@ -372,44 +374,190 @@ $L_{\text{simple}}$ & 简化的均方误差损失 \\
 q(\mathbf{x}_{t} | \mathbf{x}_{t-1}) = \mathcal{N}(\mathbf{x}_{t} ; \sqrt{1-\beta_{t}} \mathbf{x}_{t-1}, \beta_{t} \mathbf{I}) \quad q(\mathbf{x}_{1: T} | \mathbf{x}_{0}) = \prod_{t=1}^{T} q(\mathbf{x}_{t} | \mathbf{x}_{t-1})
 \end{equation}
 
+其中：
+\begin{itemize}
+    \item $\mathbf{x}_{t}$ 表示在时间步 $t$ 加入噪声后的图像数据。
+    \item $\beta_{t}$ 是控制方差的超参数，决定了每一步加入多少噪声。
+    \item $\mathcal{N}(\cdot; \mu, \Sigma)$ 表示高斯（正态）分布，均值为 $\mu$，协方差矩阵为 $\Sigma$。
+\end{itemize}
+
+实际上，上述公式可以写成重参数化的形式：
+\begin{equation}
+\mathbf{x}_{t} = \sqrt{1-\beta_{t}}\mathbf{x}_{t-1} + \sqrt{\beta_{t}}\boldsymbol{\epsilon}_{t-1}, \quad \text{其中 } \boldsymbol{\epsilon}_{t-1} \sim \mathcal{N}(\mathbf{0}, \mathbf{I})
+\end{equation}
+
+\begin{note}[关于系数根号的解释]
+    为什么系数是 $\sqrt{1-\beta_t}$ 而不是 $1-\beta_t$？这是为了\textbf{保持方差稳定}。假设输入 $\mathbf{x}_{t-1}$ 已经过标准化，即方差为 1。如果我们希望加噪后的 $\mathbf{x}_t$ 方差仍然保持为 1，根据方差性质 $\text{Var}(aX + bY) = a^2\text{Var}(X) + b^2\text{Var}(Y)$（假设独立）：
+    \begin{equation}
+        \text{Var}(\mathbf{x}_t) = (\sqrt{1-\beta_t})^2 \cdot \underbrace{\text{Var}(\mathbf{x}_{t-1})}_{\approx 1} + (\sqrt{\beta_t})^2 \cdot \underbrace{\text{Var}(\boldsymbol{\epsilon})}_{1} = (1-\beta_t) + \beta_t = 1
+    \end{equation}
+    如果不加根号，随着扩散步骤 $t$ 的增加，信号的方差会迅速衰减或爆炸。
+\end{note}
+
 随着步长 $t$ 变大，数据样本 $\mathbf{x}_{0}$ 逐渐失去其可辨别的特征。最终当 $T \to \infty$ 时，$\mathbf{x}_{T}$ 等价于各向同性高斯分布。
 
 \begin{figure}[H]
     \centering
-    \includegraphics[width=1.0\textwidth]{images/The Markov chain of forward.jpeg}
+    \includegraphics[width=1.0\textwidth]{images/markov_chain_forward.jpeg}
     \caption{前向（逆向）扩散过程的马尔可夫链，通过缓慢添加（去除）噪声来生成样本}
 \end{figure}
 
-上述过程的一个优良特性是，我们可以使用重参数化技巧以闭式解在任意时间步 $t$ 对 $\mathbf{x}_{t}$ 进行采样。令 $\alpha_{t}=1-\beta_{t}$ 且 $\bar{\alpha}_{t}=\prod_{i=1}^{t} \alpha_{i}$：
+上述过程的一个优良特性是，我们可以使用重参数化技巧以\textbf{闭式解 (Closed-form)} 在任意时间步 $t$ 对 $\mathbf{x}_{t}$ 进行采样。这意味着我们不需要迭代 $t$ 次（即 $\mathbf{x}_0 \to \mathbf{x}_1 \to \dots \to \mathbf{x}_t$），而是可以直接从 $\mathbf{x}_0$ 一步计算出 $\mathbf{x}_t$。
 
+令 $\alpha_{t}=1-\beta_{t}$ 且 $\bar{\alpha}_{t}=\prod_{i=1}^{t} \alpha_{i}$。推导如下：
+
+首先，根据前向过程定义：
+\begin{equation}
+\mathbf{x}_{t} = \sqrt{\alpha_{t}} \mathbf{x}_{t-1} + \sqrt{1-\alpha_{t}} \boldsymbol{\epsilon}_{t-1}, \quad \boldsymbol{\epsilon}_{t-1} \sim \mathcal{N}(\mathbf{0}, \mathbf{I})
+\end{equation}
+
+如果我们把 $\mathbf{x}_{t-1}$ 也展开（即代入 $\mathbf{x}_{t-1} = \sqrt{\alpha_{t-1}}\mathbf{x}_{t-2} + \sqrt{1-\alpha_{t-1}}\boldsymbol{\epsilon}_{t-2}$）：
 \begin{equation}
 \begin{aligned}
-\mathbf{x}_{t} & =\sqrt{\alpha_{t}} \mathbf{x}_{t-1}+\sqrt{1-\alpha_{t}} \boldsymbol{\epsilon}_{t-1} & ;\text{where } \boldsymbol{\epsilon}_{t-1}, \boldsymbol{\epsilon}_{t-2}, \dots \sim \mathcal{N}(\mathbf{0}, \mathbf{I}) \\
-& =\sqrt{\alpha_{t} \alpha_{t-1}} \mathbf{x}_{t-2}+\sqrt{1-\alpha_{t} \alpha_{t-1}} \bar{\boldsymbol{\epsilon}}_{t-2} & ;\text{where } \bar{\boldsymbol{\epsilon}}_{t-2} \text{ merges two Gaussians (*).} \\
-& =\dots \\
-& =\sqrt{\bar{\alpha}_{t}} \mathbf{x}_{0}+\sqrt{1-\bar{\alpha}_{t}} \boldsymbol{\epsilon}
+\mathbf{x}_{t} & = \sqrt{\alpha_{t}} (\sqrt{\alpha_{t-1}}\mathbf{x}_{t-2} + \sqrt{1-\alpha_{t-1}}\boldsymbol{\epsilon}_{t-2}) + \sqrt{1-\alpha_{t}} \boldsymbol{\epsilon}_{t-1} \\
+& = \sqrt{\alpha_{t}\alpha_{t-1}}\mathbf{x}_{t-2} + \underbrace{\sqrt{\alpha_{t}(1-\alpha_{t-1})}\boldsymbol{\epsilon}_{t-2} + \sqrt{1-\alpha_{t}}\boldsymbol{\epsilon}_{t-1}}_{\text{两个高斯分布的混合}}
 \end{aligned}
 \end{equation}
 
-也就是：
+根据高斯分布的可加性：若 $X \sim \mathcal{N}(0, \sigma_1^2 \mathbf{I}), Y \sim \mathcal{N}(0, \sigma_2^2 \mathbf{I})$ 且相互独立，则 $X+Y \sim \mathcal{N}(0, (\sigma_1^2 + \sigma_2^2)\mathbf{I})$。
+上式中，由于 $\boldsymbol{\epsilon}$ 服从标准正态分布，我们可以合并噪声项：
+\begin{equation}
+\begin{aligned}
+\text{方差} & = (\sqrt{\alpha_{t}(1-\alpha_{t-1})})^2 + (\sqrt{1-\alpha_{t}})^2 \\
+& = \alpha_{t}(1-\alpha_{t-1}) + 1 - \alpha_{t} \\
+& = \alpha_{t} - \alpha_{t}\alpha_{t-1} + 1 - \alpha_{t} \\
+& = 1 - \alpha_{t}\alpha_{t-1}
+\end{aligned}
+\end{equation}
+因此，这一步合并后的噪声项可以表示为 $\sqrt{1-\alpha_t\alpha_{t-1}}\bar{\boldsymbol{\epsilon}}_{t-2}$（其中 $\bar{\boldsymbol{\epsilon}}_{t-2} \sim \mathcal{N}(\mathbf{0}, \mathbf{I})$）。
+
+如果我们不断递归展开直到 $t=0$，所有的系数连乘起来就是累积乘积 $\bar{\alpha}_t$：
+\begin{equation}
+\mathbf{x}_{t} =\sqrt{\bar{\alpha}_{t}} \mathbf{x}_{0}+\sqrt{1-\bar{\alpha}_{t}} \boldsymbol{\epsilon}
+\end{equation}
+
+这对应着边缘分布：
 \begin{equation}
 q(\mathbf{x}_{t} | \mathbf{x}_{0})=\mathcal{N}(\mathbf{x}_{t} ; \sqrt{\bar{\alpha}_{t}} \mathbf{x}_{0},(1-\bar{\alpha}_{t}) \mathbf{I})
 \end{equation}
+
+以下代码实现了 $\beta_t$ 调度器的定义、参数的预计算以及前向扩散采样 \mintinline{python}{q_sample}:
+
+\begin{minted}[linenos, breaklines]{python}
+import torch
+import torch.nn.functional as F
+
+def cosine_beta_schedule(timesteps, s=0.008):
+    """
+    cosine schedule as proposed in https://arxiv.org/abs/2102.09672
+    """
+    steps = timesteps + 1
+    x = torch.linspace(0, timesteps, steps)
+    alphas_cumprod = torch.cos(((x / timesteps) + s) / (1 + s) * torch.pi * 0.5) ** 2
+    alphas_cumprod = alphas_cumprod / alphas_cumprod[0]
+    betas = 1 - (alphas_cumprod[1:] / alphas_cumprod[:-1])
+    return torch.clip(betas, 0.0001, 0.9999)
+
+def linear_beta_schedule(timesteps):
+    beta_start = 0.0001
+    beta_end = 0.02
+    return torch.linspace(beta_start, beta_end, timesteps)
+
+timesteps = 200
+
+# beta 调度器
+betas = linear_beta_schedule(timesteps=timesteps)
+
+# 计算 alphas
+alphas = 1. - betas
+alphas_cumprod = torch.cumprod(alphas, axis=0)
+alphas_cumprod_prev = F.pad(alphas_cumprod[:-1], (1, 0), value=1.0)
+sqrt_recip_alphas = torch.sqrt(1.0 / alphas)
+
+# calculations for diffusion q(x_t | x_{t-1}) and others
+sqrt_alphas_cumprod = torch.sqrt(alphas_cumprod)
+sqrt_one_minus_alphas_cumprod = torch.sqrt(1. - alphas_cumprod)
+
+# calculations for posterior q(x_{t-1} | x_t, x_0)
+posterior_variance = betas * (1. - alphas_cumprod_prev) / (1. - alphas_cumprod)
+
+def extract(a, t, x_shape):
+    batch_size = t.shape[0]
+    out = a.gather(-1, t.cpu())
+    return out.reshape(batch_size, *((1,) * (len(x_shape) - 1))).to(t.device)
+
+# forward diffusion
+def q_sample(x_start, t, noise=None):
+    if noise is None:
+        noise = torch.randn_like(x_start)
+
+    sqrt_alphas_cumprod_t = extract(sqrt_alphas_cumprod, t, x_start.shape)
+    sqrt_one_minus_alphas_cumprod_t = extract(
+        sqrt_one_minus_alphas_cumprod, t, x_start.shape
+    )
+
+    return sqrt_alphas_cumprod_t * x_start + sqrt_one_minus_alphas_cumprod_t * noise
+\end{minted}
 
 (*) 提示：当我们合并两个具有不同方差的高斯分布 $\mathcal{N}(\mathbf{0}, \sigma_{1}^{2} \mathbf{I})$ 和 $\mathcal{N}(\mathbf{0}, \sigma_{2}^{2} \mathbf{I})$ 时，新的分布是 $\mathcal{N}(\mathbf{0},(\sigma_{1}^{2}+\sigma_{2}^{2}) \mathbf{I})$。在这里合并的标准差是 $\sqrt{(1-\alpha_{t})+\alpha_{t}(1-\alpha_{t-1})}=\sqrt{1-\alpha_{t} \alpha_{t-1}}$。
 通常，当样本变得更嘈杂时，我们可以承受更大的更新步长，所以 $\beta_{1}<\beta_{2}<\dots<\beta_{T}$，因此 $\bar{\alpha}_{1}>\dots>\bar{\alpha}_{T}$。
 
 \subsubsection{逆向扩散过程 (Reverse Diffusion Process)}
 
-如果我们能够逆转上述过程并从 $q(\mathbf{x}_{t-1} | \mathbf{x}_{t})$ 中采样，我们就能够从高斯噪声输入 $\mathbf{x}_{T} \sim \mathcal{N}(\mathbf{0}, \mathbf{I})$ 重建真实样本。注意，如果 $\beta_{t}$ 足够小，$q(\mathbf{x}_{t-1} | \mathbf{x}_{t})$ 也将是高斯分布。遗憾的是，我们无法轻易估计 $q(\mathbf{x}_{t-1} | \mathbf{x}_{t})$，因为它需要使用整个数据集，因此我们需要学习一个模型 $p_{\theta}$ 来近似这些条件概率，以便运行逆向扩散过程。
+如果我们能够逆转上述过程并从 $q(\mathbf{x}_{t-1} | \mathbf{x}_{t})$ 中采样，我们就能够从高斯噪声输入 $\mathbf{x}_{T} \sim \mathcal{N}(\mathbf{0}, \mathbf{I})$ 一步步去噪，最终重建出服从真实数据分布的样本。
+
+\begin{note}[为什么逆向过程难以直接计算？]
+    根据贝叶斯公式，真实的逆向后验分布为：
+    \begin{equation}
+        q(\mathbf{x}_{t-1} | \mathbf{x}_{t}) = \frac{q(\mathbf{x}_{t} | \mathbf{x}_{t-1}) q(\mathbf{x}_{t-1})}{q(\mathbf{x}_{t})}
+    \end{equation}
+    虽然 $q(\mathbf{x}_{t} | \mathbf{x}_{t-1})$ 是已知的（前向加噪过程），但我们要计算这个后验分布，需要知道边缘分布 $q(\mathbf{x}_{t})$ 和 $q(\mathbf{x}_{t-1})$。为了得到这些边缘分布，我们需要对整个数据分布 $q(\mathbf{x}_0)$ 进行积分：
+    \begin{equation}
+        q(\mathbf{x}_t) = \int q(\mathbf{x}_t | \mathbf{x}_0) q(\mathbf{x}_0) d\mathbf{x}_0
+    \end{equation}
+    这相当于需要遍历整个数据集（甚至包含未观测到的真实数据），因此直接计算 $q(\mathbf{x}_{t-1} | \mathbf{x}_{t})$ 是**不可行（Intractable）**的。
+\end{note}
+
+虽然我们无法直接计算真实的 $q(\mathbf{x}_{t-1} | \mathbf{x}_{t})$，但如果 $\beta_{t}$ 足够小，这个分布近似于高斯分布。因此，我们可以训练一个深度学习模型 $p_{\theta}$ 来\textbf{近似}这个条件概率分布。模型输入当前的含噪图像 $\mathbf{x}_t$ 和时间步 $t$，输出上一时刻图像 $\mathbf{x}_{t-1}$ 的分布参数（均值和方差）。
 
 \begin{equation}
-p_{\theta}(\mathbf{x}_{0: T})=p(\mathbf{x}_{T}) \prod_{t=1}^{T} p_{\theta}(\mathbf{x}_{t-1} | \mathbf{x}_{t}) \quad p_{\theta}(\mathbf{x}_{t-1} | \mathbf{x}_{t})=\mathcal{N}(\mathbf{x}_{t-1} ; \boldsymbol{\mu}_{\theta}(\mathbf{x}_{t}, t), \boldsymbol{\Sigma}_{\theta}(\mathbf{x}_{t}, t))
+p_{\theta}(\mathbf{x}_{0: T})=p(\mathbf{x}_{T}) \prod_{t=1}^{T} p_{\theta}(\mathbf{x}_{t-1} | \mathbf{x}_{t})
 \end{equation}
 
+其中：
+\begin{itemize}
+    \item $p_{\theta}(\mathbf{x}_{0: T})$ 是逆向过程的联合概率分布，表示从纯噪声 $\mathbf{x}_T$ 到生成数据 $\mathbf{x}_0$ 的完整轨迹。
+    \item $p(\mathbf{x}_{T}) = \mathcal{N}(\mathbf{x}_{T}; \mathbf{0}, \mathbf{I})$ 是逆向过程的起点，即我们要采样的标准高斯噪声。
+    \item $\prod_{t=1}^{T} p_{\theta}(\mathbf{x}_{t-1} | \mathbf{x}_{t})$ 体现了马尔可夫性质，即当前时刻的状态只依赖于上一时刻（逆向来看是 $t$ 到 $t-1$）。
+\end{itemize}
+
+关键在于每个逆向步骤 $p_{\theta}(\mathbf{x}_{t-1} | \mathbf{x}_{t})$ 也被建模为高斯分布（因为当 $\beta_t$ 很小时，逆向过程近似高斯）：
+\begin{equation}
+p_{\theta}(\mathbf{x}_{t-1} | \mathbf{x}_{t})=\mathcal{N}(\mathbf{x}_{t-1} ; \boldsymbol{\mu}_{\theta}(\mathbf{x}_{t}, t), \boldsymbol{\Sigma}_{\theta}(\mathbf{x}_{t}, t))
+\end{equation}
+
+这里有两个可学习的参数（由神经网络拟合）：
+\begin{enumerate}
+    \item \textbf{均值} $\boldsymbol{\mu}_{\theta}(\mathbf{x}_{t}, t)$：这是模型的核心预测目标。我们需要训练一个神经网络（通常是 U-Net），输入当前的噪声图 $\mathbf{x}_t$ 和时间步 $t$，预测出这一步去噪后的均值应该在哪里。
+    \item \textbf{方差} $\boldsymbol{\Sigma}_{\theta}(\mathbf{x}_{t}, t)$：在 DDPM 的原始论文中，作者发现将方差固定为常数（如 $\beta_t \mathbf{I}$ 或 $\tilde{\beta}_t \mathbf{I}$）效果已经很好，因此通常不需要学习方差，或者仅学习一个插值系数。
+\end{enumerate}
+
+通过从该参数化分布中采样，我们可以生成新的样本。这里的“重建真实样本”并非指恢复训练集中某张特定的图片，而是指生成的图片在统计规律上服从真实数据分布 $q(\mathbf{x}_0)$，即看起来像真实的图片。
+
+\begin{note}[神经网络如何“拟合”概率分布？]
+    这是一个常见的误解。神经网络 $f_\theta$ 本身是一个确定性的函数映射（给定相同的输入，永远输出相同的结果），它无法直接输出一个“随机分布”。
+
+    在扩散模型（以及 VAE）中，我们采用的是\textbf{参数化概率分布 (Parameterized Probability Distribution)} 的思想：
+    \begin{enumerate}
+        \item \textbf{预设分布形式}：我们假设目标分布服从某种特定形式（如高斯分布 $\mathcal{N}(\mu, \Sigma)$）。
+        \item \textbf{网络预测参数}：神经网络的任务不是生成随机数，而是预测该分布的\textbf{参数}。例如，输入 $\mathbf{x}_t$，网络输出均值向量 $\boldsymbol{\mu}_\theta$ 和对角方差 $\boldsymbol{\Sigma}_\theta$。
+        \item \textbf{采样引入随机性}：一旦网络给出了确定性的参数 $\mu$ 和 $\Sigma$，我们就可以使用重参数化技巧（或者直接从分布中采样）来引入随机性：$\mathbf{x}_{t-1} = \boldsymbol{\mu}_\theta + \sqrt{\boldsymbol{\Sigma}_\theta} \cdot \mathbf{z}$，其中 $\mathbf{z} \sim \mathcal{N}(\mathbf{0}, \mathbf{I})$。
+    \end{enumerate}
+    因此，当我们说“神经网络拟合分布”时，实际上是指用神经网络去拟合\textbf{定义该分布的参数}。
+\end{note}
 \begin{figure}[H]
     \centering
-    \includegraphics[width=1.0\textwidth]{images/An example of training a diffusion model for modeling a 2D swiss roll data.jpeg}
+    \includegraphics[width=1.0\textwidth]{images/swiss_roll_diffusion.jpeg}
     \caption{训练扩散模型以建模 2D 瑞士卷数据的示例}
 \end{figure}
 
@@ -448,6 +596,51 @@ q(\mathbf{x}_{t-1} | \mathbf{x}_{t}, \mathbf{x}_{0}) & =q(\mathbf{x}_{t} | \math
 \begin{equation}
 \tilde{\boldsymbol{\mu}}_{t} = \frac{1}{\sqrt{\alpha_{t}}}\left(\mathbf{x}_{t}-\frac{1-\alpha_{t}}{\sqrt{1-\bar{\alpha}_{t}}} \boldsymbol{\epsilon}_{t}\right)
 \end{equation}
+
+以下是逆向过程的采样代码实现，包含 \mintinline{python}{p_sample}（单步采样）和 \mintinline{python}{p_sample_loop}（完整循环）：
+
+\begin{minted}[linenos, breaklines]{python}
+@torch.no_grad()
+def p_sample(model, x, t, t_index):
+    betas_t = extract(betas, t, x.shape)
+    sqrt_one_minus_alphas_cumprod_t = extract(
+        sqrt_one_minus_alphas_cumprod, t, x.shape
+    )
+    sqrt_recip_alphas_t = extract(sqrt_recip_alphas, t, x.shape)
+
+    # Equation 11 in the paper
+    # Use our model (noise predictor) to predict the mean
+    model_mean = sqrt_recip_alphas_t * (
+        x - betas_t * model(x, t) / sqrt_one_minus_alphas_cumprod_t
+    )
+
+    if t_index == 0:
+        return model_mean
+    else:
+        posterior_variance_t = extract(posterior_variance, t, x.shape)
+        noise = torch.randn_like(x)
+        # Algorithm 2 line 4:
+        return model_mean + torch.sqrt(posterior_variance_t) * noise
+
+# Algorithm 2 but save all images:
+@torch.no_grad()
+def p_sample_loop(model, shape):
+    device = next(model.parameters()).device
+
+    b = shape[0]
+    # start from pure noise (for each example in the batch)
+    img = torch.randn(shape, device=device)
+    imgs = []
+
+    for i in tqdm(reversed(range(0, timesteps)), desc='sampling loop time step', total=timesteps):
+        img = p_sample(model, img, torch.full((b,), i, device=device, dtype=torch.long), i)
+        imgs.append(img.cpu().numpy())
+    return imgs
+
+@torch.no_grad()
+def sample(model, image_size, batch_size=16, channels=3):
+    return p_sample_loop(model, shape=(batch_size, channels, image_size, image_size))
+\end{minted}
 
 \subsubsection{训练目标}
 
@@ -528,9 +721,31 @@ L_{\text{simple}} = L_{t}^{\text{simple}} + C
 \end{equation}
 其中 $C$ 是一个不依赖于 $\theta$ 的常数。
 
+代码实现中，\mintinline{python}{p_losses} 函数计算了上述的简单损失：
+
+\begin{minted}[linenos, breaklines]{python}
+def p_losses(denoise_model, x_start, t, noise=None, loss_type="l1"):
+    if noise is None:
+        noise = torch.randn_like(x_start)
+
+    x_noisy = q_sample(x_start=x_start, t=t, noise=noise)
+    predicted_noise = denoise_model(x_noisy, t)  # denoise_model is U-Net 
+
+    if loss_type == 'l1':
+        loss = F.l1_loss(noise, predicted_noise)
+    elif loss_type == 'l2':
+        loss = F.mse_loss(noise, predicted_noise)
+    elif loss_type == "huber":
+        loss = F.smooth_l1_loss(noise, predicted_noise)
+    else:
+        raise NotImplementedError()
+
+    return loss
+\end{minted}
+
 \begin{figure}[H]
     \centering
-    \includegraphics[width=1.0\textwidth]{images/The training and sampling algorithms in DDPM.jpeg}
+    \includegraphics[width=1.0\textwidth]{images/ddpm_algorithms.jpeg}
     \caption{DDPM 中的训练和采样算法}
 \end{figure}
 
@@ -566,7 +781,7 @@ Nichol \& Dhariwal (2021) 提出了一种基于余弦的方差调度，以获得
 
 \begin{figure}[H]
     \centering
-    \includegraphics[width=0.8\textwidth]{images/Comparison of linear and cosine-based scheduling.jpeg}
+    \includegraphics[width=0.8\textwidth]{images/scheduler_comparison.jpeg}
     \caption{训练期间 $\beta_t$ 的线性调度与余弦调度的比较}
 \end{figure}
 
@@ -580,7 +795,7 @@ Nichol \& Dhariwal (2021) 提出将 $\Sigma_{\theta}(\mathbf{x}_{t}, t)$ 学习�
 
 \begin{figure}[H]
     \centering
-    \includegraphics[width=0.6\textwidth]{images/Comparison of negative log-likelihood of improved DDPM.jpeg}
+    \includegraphics[width=0.6\textwidth]{images/improved_ddpm_log_likelihood.jpeg}
     \caption{改进版 DDPM 与其他生成模型的负对数似然 (NLL) 比较}
 \end{figure}
 
@@ -611,7 +826,7 @@ Nichol \& Dhariwal (2021) 提出将 $\Sigma_{\theta}(\mathbf{x}_{t}, t)$ 学习�
 
 \begin{figure}[H]
     \centering
-    \includegraphics[width=1.0\textwidth]{images/The algorithms use guidance from a classifier to run conditionedgeneration with DDPM and DDIM.jpeg}
+    \includegraphics[width=1.0\textwidth]{images/classifier_guidance.jpeg}
     \caption{使用分类器引导来进行条件生成的算法 (DDPM 和 DDIM)}
 \end{figure}
 
@@ -654,6 +869,10 @@ q_{\sigma}(\mathbf{x}_{t-1} | \mathbf{x}_{t}, \mathbf{x}_{0})=\mathcal{N}\left(\
 
 回忆 $\tilde{\beta}_{t} = \frac{1-\bar{\alpha}_{t-1}}{1-\bar{\alpha}_{t}} \cdot \beta_{t}$，令 $\sigma_{t}^{2}=\eta \cdot \tilde{\beta}_{t}$，我们可以通过超参数 $\eta \in \mathbb{R}^+$ 控制采样随机性。
 
+\begin{note}[章节分工]
+本节先给出“条件生成”的基本概念与常用做法；更系统的条件控制（Classifier Guidance/CFG 的推导与采样对接、ControlNet/InstantID/LoRA 的组合方式等）统一放在后文的\textbf{条件生成与控制}章节中。
+\end{note}
+
 \subsubsection{DDIM (Denoising Diffusion Implicit Models)}
 当 $\eta=0$ 时，采样过程变得确定性，此时模型称为去噪扩散隐模型 (DDIM)。
 DDIM 更新步骤（针对加速轨迹中的 $s < t$）：
@@ -669,7 +888,7 @@ Salimans \& Ho (2022) 提出了一种将训练好的确定性采样器蒸馏成�
 
 \begin{figure}[H]
     \centering
-    \includegraphics[width=1.0\textwidth]{images/Progressive distillation can reduce the diffusion sampling steps by half ineach iteration.jpeg}
+    \includegraphics[width=1.0\textwidth]{images/progressive_distillation.jpeg}
     \caption{渐进式蒸馏可以在每次迭代中将扩散采样步骤减半}
 \end{figure}
 
@@ -698,37 +917,77 @@ f_\theta(\mathbf{x}, t) = c_{\text{skip}}(t)\mathbf{x} + c_{\text{out}}(t)F_\the
 
 \begin{figure}[H]
     \centering
-    \includegraphics[width=1.0\textwidth]{images/Consistency models learn to map any data point on the trajectory back toits origin.jpeg}
+    \includegraphics[width=1.0\textwidth]{images/consistency_models.jpeg}
     \caption{一致性模型学习将轨迹上的任何数据点映射回其原点}
 \end{figure}
 
-\subsection{隐变量空间 (Latent Variable Space)}
+\subsection{潜在扩散模型 (Latent Diffusion Models, LDM)}
 
-潜在扩散模型 (Latent Diffusion Model, LDM; Rombach et al. 2022) 在潜在空间而不是像素空间中运行扩散过程，从而降低了训练成本并加快了推理速度。其动机是观察到图像的大部分比特贡献了感知细节，而语义和概念构成在激进压缩后仍然保留。
+传统的扩散模型（如 DDPM）直接在像素空间（Pixel Space）操作。由于图像维度通常很高（例如 $512 \times 512 \times 3$），这导致训练和推理的计算成本极高。
+Rombach et al. (2022) 提出的潜在扩散模型（LDM，即 Stable Diffusion 的基础）基于一个核心观察：图像包含两类信息——\textbf{感知细节}（高频与局部特征）和\textbf{语义信息}（宏观结构与概念）。前者可以通过通用的自动编码器高效压缩，而后者才是扩散模型需要重点学习生成的。
 
-LDM 将感知压缩（使用自动编码器去除像素级冗余）和语义压缩（在学习到的隐变量上使用扩散过程生成语义概念）松散地分解开来。
+因此，LDM 将生成过程分离为两个阶段：
+\begin{enumerate}
+    \item \textbf{感知压缩 (Perceptual Compression)}：训练一个自编码器，将高维像素空间 $\mathcal{X}$ 压缩到低维潜在空间 $\mathcal{Z}$。
+    \item \textbf{潜在扩散 (Latent Diffusion)}：在低维潜在空间 $\mathcal{Z}$ 中训练扩散模型来生成潜在向量。
+\end{enumerate}
+
+\subsubsection{第一阶段：感知压缩 (Autoencoder)}
+引入一个预训练的感知自动编码器，包含编码器 $\mathcal{E}$ 和解码器 $\mathcal{D}$。
+\begin{itemize}
+    \item \textbf{编码}：给定图像 $\mathbf{x} \in \mathbb{R}^{H \times W \times 3}$，编码器将其映射为潜在表示 $\mathbf{z} = \mathcal{E}(\mathbf{x}) \in \mathbb{R}^{h \times w \times c}$。通常下采样因子 $f = H/h = W/w$ 为 $2^m$（如 $f=8$）。
+    \item \textbf{解码}：解码器将潜在向量重建为图像 $\tilde{\mathbf{x}} = \mathcal{D}(\mathbf{z}) \approx \mathbf{x}$。
+    \item \textbf{正则化}：为了避免潜在空间出现高方差或离散化问题，通常使用 KL 正则化（类似 VAE）或 VQ 正则化（类似 VQ-GAN）。
+\end{itemize}
+
+\begin{note}[优势]
+相比于像素空间，$\mathbf{z}$ 的维度大大降低。例如 $f=8$ 时，数据体积减少为原来的 $1/64$。这使得扩散模型的训练极其高效，且允许我们在有限的计算资源上生成高分辨率图像。
+\end{note}
+
+\subsubsection{第二阶段：潜在扩散 (Diffusion in Latent Space)}
+现在的扩散过程不再直接作用于 $\mathbf{x}$，而是作用于潜在向量 $\mathbf{z}$。
+\begin{enumerate}
+    \item \textbf{前向过程}：向 $\mathbf{z}_0 = \mathcal{E}(\mathbf{x})$ 添加噪声得到 $\mathbf{z}_t$。
+    \begin{equation}
+        \mathbf{z}_t = \sqrt{\bar{\alpha}_t}\mathcal{E}(\mathbf{x}) + \sqrt{1-\bar{\alpha}_t}\boldsymbol{\epsilon}
+    \end{equation}
+    \item \textbf{逆向过程}：训练一个去噪网络 $\boldsymbol{\epsilon}_\theta(\mathbf{z}_t, t, y)$，预测添加到 $\mathbf{z}_t$ 上的噪声。
+\end{enumerate}
+
+最终的优化目标函数 $L_{LDM}$ 修改为：
+\begin{equation}
+    L_{LDM} = \mathbb{E}_{\mathcal{E}(\mathbf{x}), \boldsymbol{\epsilon} \sim \mathcal{N}(0,1), t} \left[ \| \boldsymbol{\epsilon} - \boldsymbol{\epsilon}_\theta(\mathbf{z}_t, t, \tau_\theta(y)) \|_2^2 \right]
+\end{equation}
+其中 $\tau_\theta(y)$ 是条件输入（如文本、语义图）的编码表示。
+
+\subsubsection{条件机制 (Conditioning Mechanism)}
+LDM 通过交叉注意力机制 (Cross-Attention) 灵活地注入条件信息 $y$。
+去噪网络通常采用 U-Net 架构。条件 $y$（如文本提示 "A cute cat"）首先通过特定领域的编码器 $\tau_\theta$（如 CLIP Text Encoder）转换为序列向量 $\tau_\theta(y) \in \mathbb{R}^{M \times d_\tau}$。
+
+然后，该条件向量通过交叉注意力层作用于 U-Net 的中间层特征 $\varphi_i(z_t) \in \mathbb{R}^{N \times d^i_\epsilon}$：
+\begin{equation}
+    \text{Attention}(Q, K, V) = \text{softmax}\left(\frac{QK^\top}{\sqrt{d}}\right) \cdot V
+\end{equation}
+具体的投影矩阵定义为：
+\begin{equation}
+    Q = W_Q^{(i)} \cdot \varphi_i(z_t), \quad K = W_K^{(i)} \cdot \tau_\theta(y), \quad V = W_V^{(i)} \cdot \tau_\theta(y)
+\end{equation}
+这里：
+\begin{itemize}
+    \item $Q$ (Query) 来自图像当前的潜在特征（Visual Features）。
+    \item $K$ (Key) 和 $V$ (Value) 来自条件嵌入（Text Features）。
+\end{itemize}
+这使得模型能够根据文本提示关注图像中的特定区域并进行生成。
 
 \begin{figure}[H]
     \centering
-    \includegraphics[width=0.8\textwidth]{images/The plot for tradeoff between compression rate and distortion, illustratingtwo-stage compressions - perceptual and semantic compression.jpeg}
-    \caption{压缩率与失真之间的权衡，说明了两阶段压缩：感知压缩和语义压缩}
+    \includegraphics[width=1.0\textwidth]{images/latent_diffusion_architecture.jpeg}
+    \caption{潜在扩散模型 (LDM) 的架构：左侧为感知压缩（Autoencoder），中间为潜在空间的扩散过程，右侧为通过交叉注意力注入条件信息。}
 \end{figure}
 
-感知压缩依赖于一个自编码器模型。扩散和去噪过程发生在隐向量 $z$ 上。去噪模型是一个时间条件的 U-Net，增强了交叉注意力机制（Cross-Attention）以处理灵活的条件信息（如类别标签、语义图等）。
-条件输入 $y$ 被投影到中间表示 $\tau_\theta(y) \in \mathbb{R}^{M \times d_\tau}$，然后映射到交叉注意力组件：
-\begin{equation}
-\text{Attention}(Q, K, V) = \text{softmax}\left(\frac{QK^\top}{\sqrt{d}}\right) \cdot V
-\end{equation}
-其中：
-\begin{equation}
-Q = W_Q^{(i)} \cdot \varphi_i(z_i),\ K = W_K^{(i)} \cdot \tau_\theta(y),\ V = W_V^{(i)} \cdot \tau_\theta(y)
-\end{equation}
-
-\begin{figure}[H]
-    \centering
-    \includegraphics[width=1.0\textwidth]{images/The architecture of the latent diffusion model.jpeg}
-    \caption{潜在扩散模型 (LDM) 的架构}
-\end{figure}
+\begin{note}[章节分工]
+本小节在第二章只说明“条件如何作为接口注入到去噪网络”（以交叉注意力为代表）；更完整的条件控制推导与实践（CFG/ControlNet/LoRA/InstantID 以及它们的组合）统一放在后文\textbf{条件生成与控制}章节。
+\end{note}
 
 \subsection{扩大生成分辨率与质量}
 
@@ -740,7 +999,7 @@ Q = W_Q^{(i)} \cdot \varphi_i(z_i),\ K = W_K^{(i)} \cdot \tau_\theta(y),\ V = W_
 
 \begin{figure}[H]
     \centering
-    \includegraphics[width=1.0\textwidth]{images/A cascaded pipeline of multiple diffusion models at increasingresolutions.jpeg}
+    \includegraphics[width=1.0\textwidth]{images/cascaded_diffusion.jpeg}
     \caption{多个扩散模型在增加分辨率时的级联管道}
 \end{figure}
 
@@ -758,7 +1017,7 @@ P(x|y) = \underbrace{P(x, c^i|y)}_{c^i \text{ is deterministic given } x} = P(x|
 
 \begin{figure}[H]
     \centering
-    \includegraphics[width=1.0\textwidth]{images/The architecture of unCLIP.jpeg}
+    \includegraphics[width=1.0\textwidth]{images/unclip_architecture.jpeg}
     \caption{unCLIP 的架构}
 \end{figure}
 
@@ -767,43 +1026,309 @@ Imagen (Saharia et al. 2022) 使用预训练的大型语言模型（即冻结的
 
 \subsection{模型架构 (Model Architecture)}
 
-扩散模型有两个常见的骨干架构选择：U-Net 和 Transformer。
+扩散模型的核心是\textbf{噪声预测网络} $\boldsymbol{\epsilon}_\theta(\mathbf{x}_t, t, y)$。该网络必须满足两个条件：
+\begin{enumerate}
+    \item \textbf{输入输出同维}：输入是含噪图像 $\mathbf{x}_t$，输出是预测的噪声 $\boldsymbol{\epsilon}$（或去噪后的图像），两者维度相同（如 $H \times W \times C$）。
+    \item \textbf{条件注入}：必须能够接收时间步 $t$ 和其他条件 $y$（文本、类别等）作为输入。
+\end{enumerate}
 
-\subsubsection{U-Net}
-U-Net (Ronneberger, et al. 2015) 由下采样堆栈和上采样堆栈组成，中间通过快捷连接（Shortcut Connections）相连，提供高分辨率特征。
+目前主流的骨干网络架构主要有两种：U-Net 和 Transformer (DiT)。此外，为了实现精细的空间控制，ControlNet 也是一种重要的架构变体。
+
+\paragraph{符号约定（避免前后混乱）}
+在第二章中我们常用 $y$ 表示“文本/类别等条件”。在后文更一般的条件控制里会把所有条件统一写成 $\mathbf{c}$，并在多模态时写作 $\mathbf{c}=(\mathbf{c}_{text},\mathbf{c}_{img},\ldots)$。因此可以把本章的 $y$ 理解为 $\mathbf{c}_{text}$ 的简写。
+
+\subsubsection{U-Net 架构}
+U-Net (Ronneberger et al., 2015) 最初用于医学图像分割，因其强大的多尺度特征融合能力而被引入扩散模型（最早在 DDPM 中使用）。
+
+\textbf{1. 总体结构} \\
+U-Net 由三个部分组成：
+\begin{itemize}
+    \item \textbf{下采样路径 (Encoder)}：通过一系列卷积层和池化层（或步幅卷积）逐步减小特征图的空间分辨率，同时增加通道数。这部分负责提取图像的高级语义特征。
+    \item \textbf{瓶颈层 (Bottleneck)}：在分辨率最低处（如 $8 \times 8$）进行处理，通常包含自注意力机制以捕捉全局上下文。
+    \item \textbf{上采样路径 (Decoder)}：通过反卷积或插值逐步恢复空间分辨率。
+    \item \textbf{跳跃连接 (Skip Connections)}：将 Encoder 中对应层的特征图直接拼接到 Decoder 中。这对扩散模型至关重要，因为预测的噪声通常包含高频细节，通过跳跃连接可以直接传递低层级的纹理信息，避免信息在深层网络中丢失。
+\end{itemize}
+
+\textbf{2. 时间步嵌入 (Time Embedding)} \\
+为了让网络知道当前的去噪进度，时间步 $t$ 被映射为一个向量（类似于 Transformer 的位置编码，通常使用正弦位置编码 Sinusoidal Embedding）。该向量通过 MLP 处理后，被注入到 U-Net 的每一个残差块（ResBlock）中，通常采用 \textbf{相加 (Addition)} 或 \textbf{自适应归一化 (AdaGN/FiLM)} 的方式：
+\begin{equation}
+    \text{AdaGN}(h, t) = y_s(t) \cdot \frac{h - \mu}{\sigma} + y_b(t)
+\end{equation}
+其中 $y_s(t)$ 和 $y_b(t)$ 是由时间嵌入生成的缩放和平移系数。
+
+\textbf{3. 交叉注意力 (Cross-Attention)} \\
+为了注入文本或其他条件 $y$，U-Net 在各个分辨率层级均插入了空间变换器（Spatial Transformer）模块，主要包含交叉注意力层：
+\begin{equation}
+    \text{Attention}(Q, K, V) = \text{softmax}\left(\frac{Q K^T}{\sqrt{d}}\right)V
+\end{equation}
+其中 $Q$ 来自图像特征，$K, V$ 来自条件编码（如 CLIP Text Embedding）。
 
 \begin{figure}[H]
     \centering
-    \includegraphics[width=0.8\textwidth]{images/The U-net architecture.jpeg}
+    \includegraphics[width=0.8\textwidth]{images/unet_architecture.jpeg}
     \caption{U-Net 架构}
 \end{figure}
 
-\subsubsection{ControlNet}
-为了通过额外的图像（如 Canny 边缘、Hough 线、人体骨架图等）对图像生成进行条件控制，ControlNet (Zhang et al. 2023) 引入了架构更改。它主要包括两步：锁定原始模型参数，并创建一个可训练的副本；通过“零卷积”层连接这两个块。零卷积层的权重和偏置初始化为零，从而在训练初始阶段保护骨干网络不受随机噪声梯度的影响。
-对于神经网络块 $F_\theta(\cdot)$，ControlNet 首先冻结 $\theta$，然后克隆它得到带有参数 $\theta_c$ 的副本。零卷积层 $Z_{\theta_{z1}}$ 和 $Z_{\theta_{z2}}$ 连接这两个块：
+\subsubsection{Diffusion Transformer (DiT)}
+虽然 U-Net 在早期扩散模型中占据统治地位，但基于 Transformer 的架构（如 DiT, Peebles \& Xie, 2023）正在成为新一代主流（如 Sora, Stable Diffusion 3）。
+
+\textbf{1. Patchify (类似 ViT)} \\
+DiT 抛弃了 U-Net 的卷积归纳偏置。它首先将输入的含噪图像（或潜在特征 $\mathbf{z}$）划分为一个个固定大小的补丁（Patches，例如 $4 \times 4$ 或 $2 \times 2$）。
+这些 Patches 被展平并线性投影为序列向量（Tokens），输入到标准的 Transformer 块中。
+
+\textbf{2. 架构优势} \\
+\begin{itemize}
+    \item \textbf{可扩展性 (Scalability)}：DiT 证明了扩散模型的性能随着计算量（Gflops）和参数量的增加而呈现幂律（Scaling Law）提升。
+    \item \textbf{全局交互}：相比于卷积的局部感受野，Self-Attention 机制允许每个 Patch 从第一层开始就与全图其他 Patch 交互，更利于处理长距离依赖。
+\end{itemize}
+
+\textbf{3. 自适应层归一化 (adaLN-Zero)} \\
+DiT 处理时间步 $t$ 和类别标签 $c$ 的方式非常简洁。它在每个 Transformer 块之前回归出缩放移位参数 $\gamma, \beta$ 以及维度缩放参数 $\alpha$，直接调节层归一化（Layer Norm）：
 \begin{equation}
-y_c = F_\theta(\mathbf{x}) + Z_{\theta_{z2}}(F_{\theta_c}(\mathbf{x} + Z_{\theta_{z1}}(\mathbf{c})))
+    \text{adaLN}(x, c, t) = \gamma(c, t) \cdot \text{LayerNorm}(x) + \beta(c, t)
 \end{equation}
 
 \begin{figure}[H]
     \centering
-    \includegraphics[width=1.0\textwidth]{images/The ControlNet architecture.jpeg}
-    \caption{ControlNet 架构}
-\end{figure}
-
-\subsubsection{Diffusion Transformer (DiT)}
-Diffusion Transformer (DiT; Peebles \& Xie, 2023) 在潜在图块（Latent Patches）上运行。其步骤如下：
-1. 将输入 $z$ 的潜在表示作为输入。
-2. 将噪声潜在表示“Patchify”为序列。
-3. 输入 Transformer 块。
-DiT 使用 adaLN-Zero（自适应层归一化）机制来注入条件信息（如时间步 $t$ 和类别 $c$）。DiT 的一大优势是其性能随着计算量的增加和模型规模的扩大而有效扩展。
-
-\begin{figure}[H]
-    \centering
-    \includegraphics[width=1.0\textwidth]{images/The Diffusion Transformer.jpeg}
+    \includegraphics[width=1.0\textwidth]{images/diffusion_transformer.jpeg}
     \caption{Diffusion Transformer (DiT) 架构}
 \end{figure}
 
+\subsubsection{ControlNet}
+ControlNet (Zhang et al., 2023) 是一种用于向预训练扩散模型添加空间控制条件（如 Canny 边缘、姿态骨架、深度图）的神经网络结构。它的核心设计理念是“不破坏原始模型的生成能力”。
+
+\textbf{1. 零卷积 (Zero Convolution)} \\
+这是 ControlNet 的核心组件。它是一个 $1 \times 1$ 卷积层，其权重和偏置初始化为零。
+\begin{equation}
+    y = \text{ZeroConv}(x) = \mathbf{0} \cdot x + \mathbf{0} = \mathbf{0}
+\end{equation}
+这保证了在训练初始阶段，ControlNet 分支的输出为零，对主模型的干扰为零，就像 ControlNet 不存在一样。随着训练进行，权重逐渐更新，控制信号才开始生效。
+
+\textbf{2. 锁定副本与可训练副本 (Locked Copy \& Trainable Copy)} \\
+ControlNet 并不直接微调整个 U-Net，而是：
+\begin{itemize}
+    \item \textbf{锁定副本}：保留原始预训练 U-Net 的编码器部分，参数冻结（Locked），确保原有的图像生成能力不退化。
+    \item \textbf{可训练副本}：克隆一份 U-Net 的编码器结构，但这部分参数是可训练的。它接收额外的控制条件（如边缘图 $c_{img}$）作为输入。
+\end{itemize}
+
+这两个分支的特征图通过零卷积层相加，注入到原始 U-Net 的解码器部分：
+\begin{equation}
+    h_{decoder} = h_{locked} + \text{ZeroConv}(h_{trainable}(x + c_{img}))
+\end{equation}
+
+一种更“整体”的写法是把它看成对任意网络块 $F_\theta(\cdot)$ 的改造（冻结 $\theta$，训练副本 $\theta_c$，并用零卷积注入控制条件 $\mathbf{c}$）：
+\begin{equation}
+    y_c = F_\theta(\mathbf{x}) + Z_{\theta_{z2}}\Big(F_{\theta_c}\big(\mathbf{x} + Z_{\theta_{z1}}(\mathbf{c})\big)\Big)
+\end{equation}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=1.0\textwidth]{images/controlnet_architecture.jpeg}
+    \caption{ControlNet 架构}
+\end{figure}
+
+% \begin{figure}[H]
+%     \centering
+%     \includegraphics[width=0.9\textwidth]{images/controlnet_architecture.png}
+%     \caption{ControlNet 架构示意图：通过锁定原始模型并并行训练一个副本，利用零卷积逐步注入控制信号。}
+
+\begin{note}[阅读提示]
+本节只给出 U-Net/DiT/ControlNet 的\textbf{架构要点}，以便建立“扩散=过程+去噪网络”的主线；更细的条件控制推导与工程组合方式统一见后文\textbf{条件生成与控制}章节。
+\end{note}
+
+\paragraph{交叉注意力公式（完整写法）}
+设某一层图像特征（或潜空间特征）为 $\varphi_i(\mathbf{x}_t)$，则
+\begin{equation}
+    \text{Attention}(Q,K,V)=\text{softmax}\left(\frac{QK^\top}{\sqrt{d}}\right)V,
+\end{equation}
+并且
+\begin{equation}
+    Q=W_Q\,\varphi_i(\mathbf{x}_t),\quad K=W_K\,\mathbf{c}_{text},\quad V=W_V\,\mathbf{c}_{text}.
+\end{equation}
+这等价于：每一步去噪时，图像特征“询问”文本条件中与当前局部最相关的 token，从而把语义约束注入生成过程。
+
+\paragraph{空提示与负面提示 (Negative Prompt)}
+后文的 CFG 会用到“无条件”分支。最常见的是空提示 $\emptyset$（空字符串）作为无条件文本：$\mathbf{c}_{uncond}=\tau(\emptyset)$。
+在实际系统里也常用\textbf{负面提示} $y^{-}$ 作为无条件分支（例如“low quality, blurry, ...”）：
+\begin{equation}
+    \mathbf{c}_{uncond}=\tau(y^{-}),\qquad \mathbf{c}_{cond}=\tau(y^{+}).
+\end{equation}
+
+\subsection{基于分类器的引导 (Classifier Guidance)}
+
+在条件生成里，一个非常关键的等式是：
+\begin{equation}
+    \nabla_{\mathbf{x}_t}\log p(\mathbf{x}_t\mid \mathbf{c}) = \nabla_{\mathbf{x}_t}\log p(\mathbf{x}_t) + \nabla_{\mathbf{x}_t}\log p(\mathbf{c}\mid \mathbf{x}_t).
+\end{equation}
+它说明：\textbf{条件 score} 等于\textbf{无条件 score} 加上一个“把样本往条件方向推”的梯度项。
+
+若我们有一个额外训练的分类器/匹配模型 $p_\phi(\mathbf{c}\mid \mathbf{x}_t)$，则可以用它的梯度来修正去噪方向（见 \cite{dhariwal2021diffusion}）：
+\begin{equation}
+    \mathbf{s}_{guided}(\mathbf{x}_t,t,\mathbf{c}) = \mathbf{s}_\theta(\mathbf{x}_t,t) + w\,\nabla_{\mathbf{x}_t}\log p_\phi(\mathbf{c}\mid \mathbf{x}_t),
+\end{equation}
+其中 $\mathbf{s}_\theta(\mathbf{x}_t,t)\approx \nabla_{\mathbf{x}_t}\log p_\theta(\mathbf{x}_t)$ 是扩散模型自身提供的无条件 score，$w$ 控制引导强度。
+
+该方法的代价是：需要额外的分类器，并且每一步采样都要对 $\log p_\phi$ 求梯度（更慢、更复杂）。因此在文本到图像系统里，主流逐渐转向下一节的 CFG。
+
+\subsection{无分类器引导 (Classifier-Free Guidance, CFG)}
+
+CFG（Ho \& Salimans, 2022，见 \cite{ho2021classifier}）的核心点是：\textbf{不再训练额外分类器}，而是让同一个去噪网络同时学会“有条件/无条件”两种行为。
+
+\subsubsection{训练：条件 dropout 让模型学会无条件}
+
+训练时以概率 $p_{drop}$ 把条件替换为空条件 $\emptyset$：
+\begin{equation}
+    \mathbf{c}=\begin{cases}
+    \emptyset, & \text{with prob. } p_{drop}\\
+    y, & \text{with prob. } 1-p_{drop}
+    \end{cases}
+\end{equation}
+于是同一个网络可以输出两种噪声预测：
+\begin{equation}
+    \boldsymbol\epsilon_{cond}=\boldsymbol\epsilon_\theta(\mathbf{x}_t,t,y),\qquad
+    \boldsymbol\epsilon_{uncond}=\boldsymbol\epsilon_\theta(\mathbf{x}_t,t,\emptyset).
+\end{equation}
+
+\subsubsection{推理：CFG 的“公式原版”与等价写法}
+
+CFG 在推理阶段把两次前向的结果做线性组合：
+\begin{equation}
+    \tilde{\boldsymbol\epsilon}_\theta(\mathbf{x}_t,t,y)=\boldsymbol\epsilon_{uncond}+w\,(\boldsymbol\epsilon_{cond}-\boldsymbol\epsilon_{uncond}).
+\end{equation}
+等价地写作：
+\begin{equation}
+    \tilde{\boldsymbol\epsilon}_\theta=(1+w)\,\boldsymbol\epsilon_{cond}-w\,\boldsymbol\epsilon_{uncond}.
+\end{equation}
+
+\subsubsection{与采样更新的“对接”}
+
+一旦得到 $\tilde{\boldsymbol\epsilon}_\theta$，就把它当作普通噪声预测塞回去噪更新即可。一个常见写法是：
+\begin{equation}
+    \mathbf{x}_{t-1}=\frac{1}{\sqrt{\alpha_t}}\left(\mathbf{x}_t-\frac{1-\alpha_t}{\sqrt{1-\bar\alpha_t}}\,\tilde{\boldsymbol\epsilon}_\theta\right)+\sigma_t\mathbf{z},\qquad \mathbf{z}\sim\mathcal{N}(\mathbf{0},\mathbf{I}).
+\end{equation}
+因此，CFG 的本质非常“工程化”：\textbf{只要替换噪声预测，整个采样过程不需要改任何别的东西。}
+
+\paragraph{引导尺度 $w$ 的含义}
+当 $w=0$ 时，退化为无条件生成；当 $w$ 增大时，语义对齐更强，但也更容易出现过饱和、细节怪异、文本过拟合等副作用。
+
+\subsection{基于输入图像的条件控制：Img2Img 与 Inpainting}
+
+除了“从纯噪声生成”，扩散模型还常做\textbf{条件编辑}。
+
+\subsubsection{Img2Img：先把输入图像加噪到 $t$ 再去噪}
+给定输入图像 $\mathbf{x}_{init}$，先采样噪声 $\boldsymbol\epsilon\sim\mathcal{N}(\mathbf{0},\mathbf{I})$ 并加噪到某一时间步 $t$：
+\begin{equation}
+    \mathbf{x}_t=\sqrt{\bar\alpha_t}\,\mathbf{x}_{init}+\sqrt{1-\bar\alpha_t}\,\boldsymbol\epsilon.
+\end{equation}
+然后从 $t\to 0$ 执行逆向去噪，但在每一步都带条件（文本/风格等）。其中 $t$ 越大，改动越大；$t$ 越小，越接近保留原图结构。
+
+\subsubsection{Inpainting：用 mask 锁定已知区域}
+设 mask $\mathbf{m}\in\{0,1\}^{H\times W}$（1 表示“保留/已知区域”）。在采样过程中，常用一个简单而有效的融合规则：
+\begin{equation}
+    \mathbf{x}_t \leftarrow \mathbf{m}\odot \mathbf{x}_t^{known} + (1-\mathbf{m})\odot \mathbf{x}_t^{unknown},
+\end{equation}
+其中 $\mathbf{x}_t^{known}$ 可以由原图加噪得到（保证已知区域不漂移），$\mathbf{x}_t^{unknown}$ 是模型当前一步生成的未知区域。
+
+\subsection{精细化空间控制 (ControlNet)}
+
+文本条件强在语义弱在几何；要精确控制姿态/边缘/深度等空间结构，常用 ControlNet（\cite{zhang2023adding}）。
+
+\subsubsection{把 ControlNet 也视作条件 $\mathbf{c}$ 的一部分}
+我们可以把条件写成多模态组合：
+\begin{equation}
+    \mathbf{c}=(\mathbf{c}_{text},\mathbf{c}_{img}),
+\end{equation}
+其中 $\mathbf{c}_{img}$ 是边缘图/姿态骨架/深度图等。于是噪声预测网络自然扩展为：
+\begin{equation}
+    \boldsymbol\epsilon_\theta(\mathbf{x}_t,t,\mathbf{c}) = \boldsymbol\epsilon_\theta(\mathbf{x}_t,t,\mathbf{c}_{text},\mathbf{c}_{img}).
+\end{equation}
+
+\subsubsection{结构：冻结主干 + 可训练副本 + 零卷积}
+ControlNet 的设计原则是“不破坏原模型”：冻结原始 U-Net 参数 $\Theta$，并训练一个带参数 $\Theta_c$ 的副本，同时用零卷积 $\mathcal{Z}$ 逐步把控制信号注入主干：
+\begin{equation}
+    \mathbf{y}_c = \mathcal{F}(\mathbf{x};\Theta) + \mathcal{Z}(\mathcal{F}(\mathbf{x} + \mathcal{Z}(\mathbf{c}_{img};\Theta_{z1});\Theta_c);\Theta_{z2}).
+\end{equation}
+由于初始化时 $\mathcal{Z}(\cdot)=\mathbf{0}$，训练初期主干几乎不受扰动；随着训练进行，控制分支逐渐“接管”空间结构。
+
+\subsubsection{ControlNet 与 CFG 的组合（最常用写法）}
+实际系统通常会同时使用文本 CFG 与 ControlNet 空间条件。最常用的做法是：\textbf{空间条件在两次前向中都保留，只在文本上做 cond/uncond}：
+\begin{equation}
+    \boldsymbol\epsilon_{cond}=\boldsymbol\epsilon_\theta(\mathbf{x}_t,t, y,\mathbf{c}_{img}),\qquad
+    \boldsymbol\epsilon_{uncond}=\boldsymbol\epsilon_\theta(\mathbf{x}_t,t, \emptyset,\mathbf{c}_{img}),
+\end{equation}
+再按 CFG 公式得到 $\tilde{\boldsymbol\epsilon}_\theta$ 并执行采样更新。这样语义与结构约束可以同时增强，并且实现上非常直接。
+
+\subsection{身份一致的个性化控制：InstantID}
+
+在“条件控制”的谱系里，InstantID（\cite{instantid2024}）解决的是另一类非常实用的问题：\textbf{给一张参考人脸（reference face），在几乎不训练或极少训练的情况下，让生成结果保持同一身份（identity-preserving）}。它可以看作把“身份条件”加入到我们前面统一记号的 $\mathbf{c}$ 里：
+\begin{equation}
+    \mathbf{c}=(\mathbf{c}_{text},\;\mathbf{c}_{id},\;\mathbf{c}_{kp}),
+\end{equation}
+其中 $\mathbf{c}_{id}$ 是身份嵌入（identity embedding），$\mathbf{c}_{kp}$ 是与人脸几何结构强相关的条件（如关键点/姿态/轮廓），通常通过 ControlNet 注入。
+
+\subsubsection{为什么“只靠文本”很难锁定身份？}
+文本提示词更像是语义约束（年龄、发型、表情、风格），而“身份”是一个更细粒度、更高维且非常敏感的约束。实践中，如果仅依赖文本 Cross-Attention，模型往往会生成“像某类人”，但无法稳定复现同一个人的面部细节（眼距、五官比例、痣/皱纹等）。因此 InstantID 引入了一个专门的身份向量 $\mathbf{c}_{id}$ 来做条件控制。
+
+\subsubsection{步骤 1：从参考人脸提取身份嵌入 $\mathbf{c}_{id}$}
+给定参考人脸图像 $\mathbf{x}_{ref}$，先进行人脸检测与对齐（alignment），再用一个人脸识别模型（例如 ArcFace 类的识别网络）提取身份嵌入：
+\begin{equation}
+    \mathbf{c}_{id} = f_{id}(\mathbf{x}_{ref})\in\mathbb{R}^{d_{id}}.
+\end{equation}
+直观理解：$\mathbf{c}_{id}$ 的设计目标不是“重建这张脸”，而是把身份信息压缩成在不同表情、光照、角度下仍稳定的特征。
+
+\subsubsection{步骤 2：把身份嵌入变成可被 Cross-Attention 使用的“条件 token”}
+为了让 U-Net 的 Cross-Attention 能利用 $\mathbf{c}_{id}$，常见做法是把它投影为一组“伪 token”（identity tokens），并与文本 token 拼接（这与很多 image-prompt adapter / IP-Adapter 思路一致）：
+\begin{equation}
+    \mathbf{c}_{id\_tok} = P(\mathbf{c}_{id})\in\mathbb{R}^{M_{id}\times d_\tau},
+\end{equation}
+然后把条件序列写为
+\begin{equation}
+    \mathbf{c}_{all} = [\,\mathbf{c}_{text};\;\mathbf{c}_{id\_tok}\,] \in \mathbb{R}^{(M+M_{id})\times d_\tau}.
+\end{equation}
+这样 Cross-Attention 的 $K,V$ 就来自同一个序列 $\mathbf{c}_{all}$：
+\begin{equation}
+    Q=W_Q\,\varphi_i(\mathbf{x}_t),\quad K=W_K\,\mathbf{c}_{all},\quad V=W_V\,\mathbf{c}_{all}.
+\end{equation}
+它的效果是：去噪时模型既能从文本 token 里取语义约束，也能从身份 token 里取身份约束，从而把“像谁”这一件事变得可控。
+
+\subsubsection{步骤 3：用人脸关键点/姿态的 ControlNet 锁定几何结构}
+仅靠身份 token 仍可能出现面部结构漂移（比如头部姿态、五官位置不稳定）。InstantID 常配合一个几何条件（如 2D/3D 关键点、面部姿态等），并用 ControlNet 形式注入：
+\begin{equation}
+    \boldsymbol\epsilon_\theta(\mathbf{x}_t,t,\mathbf{c}) = \boldsymbol\epsilon_\theta(\mathbf{x}_t,t,\mathbf{c}_{all},\mathbf{c}_{kp}).
+\end{equation}
+其中 $\mathbf{c}_{kp}$ 体现“结构该长什么样”，而 $\mathbf{c}_{id}$ 体现“这个人是谁”。两者结合，通常能显著提升身份一致性与结构稳定性。
+
+\subsubsection{InstantID 与 CFG 的组合（文本/身份/结构同时存在）}
+当同时使用 CFG 时，一个常见且有效的组合策略是：\textbf{无条件分支只去掉文本（或用负面提示），身份与结构条件保持不变}，避免“uncond 分支”把身份信息也抹掉：
+\begin{equation}
+    \boldsymbol\epsilon_{cond}=\boldsymbol\epsilon_\theta(\mathbf{x}_t,t, y,\mathbf{c}_{id},\mathbf{c}_{kp}),\qquad
+    \boldsymbol\epsilon_{uncond}=\boldsymbol\epsilon_\theta(\mathbf{x}_t,t, \emptyset,\mathbf{c}_{id},\mathbf{c}_{kp}).
+\end{equation}
+然后仍按 CFG 组合：
+\begin{equation}
+    \tilde{\boldsymbol\epsilon}_\theta=\boldsymbol\epsilon_{uncond}+w\,(\boldsymbol\epsilon_{cond}-\boldsymbol\epsilon_{uncond}),
+\end{equation}
+并把 $\tilde{\boldsymbol\epsilon}_\theta$ 代回采样更新式。实践中还可以为身份条件再加一个独立尺度（identity scale），但本质仍是“多条件共同决定去噪方向”。
+
+\subsection{参数高效条件适配：LoRA}
+
+当我们希望把扩散模型适配到特定风格/人物/领域时，最直接的是全参数微调，但代价高且容易遗忘。LoRA（见 \cite{hu2021lora}）用“低秩更新”把可训练参数压到极小。
+
+\subsubsection{核心公式（含缩放因子）}
+对任意线性层 $W_0\in\mathbb{R}^{d\times k}$，LoRA 用低秩矩阵近似更新量：
+\begin{equation}
+    W = W_0 + \Delta W,\qquad \Delta W = \frac{\alpha}{r}BA,
+\end{equation}
+其中 $B\in\mathbb{R}^{d\times r},A\in\mathbb{R}^{r\times k}$，$r\ll\min(d,k)$，$\alpha$ 是缩放超参。
+
+\subsubsection{LoRA 注入位置：为什么常用在 Cross-Attention}
+在文本到图像模型中，条件信息主要经由 Cross-Attention 进入网络，因此最常见的注入点就是 $W_Q,W_K,W_V,W_{out}$：
+\begin{equation}
+    Q=(W_Q+\Delta W_Q)\,\varphi_i(\mathbf{x}_t),\quad
+    K=(W_K+\Delta W_K)\,\mathbf{c}_{text},\quad
+    V=(W_V+\Delta W_V)\,\mathbf{c}_{text}.
+\end{equation}
+训练时冻结 $W_0$ 只训练 $A,B$，保存/分发的就是这些小矩阵文件，因此社区里的风格 LoRA 往往只有几 MB。
 \nocite{*}
 \bibliography{references}
 \end{document}
